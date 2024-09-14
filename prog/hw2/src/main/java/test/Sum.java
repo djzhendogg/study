@@ -1,24 +1,22 @@
 public class Sum {
     public static void main(String[] args) {
         int sum = 0;
-        String n = "";
+        StringBuilder numberString = new StringBuilder();
         for (String arg: args) {
-            for (char ch: arg.toCharArray()) {
-                if (Character.isWhitespace(ch)) {
-                    if (!n.isEmpty()) {
-                        int foo = Integer.parseInt(n);
-                        sum += foo;
+            for (char character: arg.toCharArray()) {
+                if (Character.isWhitespace(character)) {
+                    if (!numberString.isEmpty()) {
+                        sum += Integer.parseInt(numberString.toString());
                     }
-                    n = "";
+                    numberString = new StringBuilder();
                 } else {
-                    n += ch;
+                    numberString.append(character);
                 }
             }
-            if (!n.isEmpty()) {
-                int foo = Integer.parseInt(n);
-                sum += foo;
+            if (!numberString.isEmpty()) {
+                sum += Integer.parseInt(numberString.toString());
             }
-            n = "";
+            numberString = new StringBuilder();
         }
         System.out.println(sum);
     }
