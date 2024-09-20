@@ -1,18 +1,20 @@
-package main.java.test;
-
 public class SumFloat {
     public static void main(String[] args) {
         float sum = 0;
-        StringBuilder numberString = new StringBuilder();
         for (String arg: args) {
-            for (char character: (arg + " ").toCharArray()) {
-                if (Character.isWhitespace(character)) {
-                    if (!numberString.isEmpty()) {
-                        sum += Float.parseFloat(numberString.toString());
+            arg += " ";
+            int pointer = 0;
+            boolean previosSpace = true;
+            for (int i = 0; i < arg.length(); i++) {
+                if (Character.isWhitespace(arg.charAt(i))) {
+                    if (!previosSpace) {
+                        sum += Float.parseFloat(arg.substring(pointer, i));
                     }
-                    numberString = new StringBuilder();
-                } else {
-                    numberString.append(character);
+                    pointer = i;
+                    previosSpace = true;
+                } else if (previosSpace) {
+                    pointer = i;
+                    previosSpace = false;
                 }
             }
         }
