@@ -1,12 +1,14 @@
-public class Sum {
+package main.java.test;
+
+public class SumFloat {
     public static void main(String[] args) {
-        int sum = 0;
+        float sum = 0;
         StringBuilder numberString = new StringBuilder();
         for (String arg: args) {
             for (char character: (arg + " ").toCharArray()) {
                 if (Character.isWhitespace(character)) {
                     if (!numberString.isEmpty()) {
-                        sum += Integer.parseInt(numberString.toString());
+                        sum += Float.parseFloat(numberString.toString());
                     }
                     numberString = new StringBuilder();
                 } else {
