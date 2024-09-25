@@ -1,9 +1,0 @@
-StudentsWithMarks(StudentId) :-
-   Students(StudentId, _, _),
-   Marks(StudentId, CourseId, _),
-   CourseId = :CourseId.
-
-StudentsWithoutMark(StudentId, StudentName, GroupName) :-
-    Students(StudentId, StudentName, GroupId),
-	Groups(GroupId, GroupName),
-	¬StudentsWithMarks(StudentId).

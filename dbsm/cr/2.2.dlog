@@ -1,7 +1,0 @@
-TeamsSolvedTask(TeamId) :-
-    Sessions(SessionId, TeamId, :ContestId, _),
-	Runs(_, SessionId, :Letter, _, 1).
-	
-TeamsNameSolvedTask(TeamName) :-
-	Teams(TeamId, TeamName),
-	TeamsSolvedTask(TeamId).

@@ -1,8 +1,0 @@
-StudentWithMarkForCourse(StudentId, CourseId) :-
-    Marks(StudentId, CourseId, _).
-
-StudentWithCourse(StudentName, CourseName) :-
-    Students(StudentId, StudentName, GroupId),
-	Plan(GroupId, CourseId, _),
-	¬StudentWithMarkForCourse(StudentId, CourseId),
-	Courses(CourseId, CourseName).

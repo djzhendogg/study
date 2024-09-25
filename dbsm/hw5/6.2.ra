@@ -1,4 +1,0 @@
-π{StudentId}(Students) ∖
-π{StudentId}
-  (σ{LecturerName = :LecturerName}
-    (Plan ⋈ Lecturers ⋈ Marks ⋈ Students))

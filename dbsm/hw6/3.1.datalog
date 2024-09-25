@@ -1,7 +1,0 @@
-StudentWithCourse(StudentId, CourseId) :-
-    Students(StudentId, _, GroupId),
-	Plan(GroupId, CourseId, _).
-	
-StudentWithCourse(StudentId, CourseId) :-
-    Marks(StudentId, CourseId, _).
-	

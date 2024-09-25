@@ -1,5 +1,0 @@
-StudentsWithMarkForCourse(StudentId, StudentName, GroupId) :-
-    Students(StudentId, StudentName, GroupId),
-	Marks(StudentId, CourseId, Mark),
-	Mark = :Mark,
-	CourseId = :CourseId.

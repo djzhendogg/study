@@ -1,7 +1,0 @@
-π{StudentId, StudentName, GroupId}(
-	Students ⋈ 
-	(
-		σ{Mark = :Mark}(Marks) ⋈ 
-		σ{LecturerId = :LecturerId}(Plan)
-	)
-)

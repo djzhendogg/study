@@ -1,2 +1,0 @@
-π{SessionId}(Sessions) ∖
-  (π{SessionId}(π{SessionId, Letter}(Sessions ⋈ Problems) ∖ π{SessionId, Letter}(Runs)))

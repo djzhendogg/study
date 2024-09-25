@@ -1,3 +1,0 @@
-π{RunId, SessionId, Letter, SubmitTime}
-  (σ{Accepted = 1}
-    (Runs ⋈ (σ{ContestId = :ContestId}(Sessions))))

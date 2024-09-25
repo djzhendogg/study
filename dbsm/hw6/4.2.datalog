@@ -1,9 +1,0 @@
-StudentWithBadMarkForCourse(StudentId, CourseId) :-
-    Marks(StudentId, CourseId, Mark),
-	Mark < 3.
-
-StudentWithCourse(StudentName, CourseName) :-
-    Students(StudentId, StudentName, GroupId),
-	Plan(GroupId, CourseId, _),
-	StudentWithBadMarkForCourse(StudentId, CourseId),
-	Courses(CourseId, CourseName).
