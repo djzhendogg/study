@@ -56,4 +56,5 @@ def make_request(link):
         print(f"An error occured with status {response.status_code}")
     else:
         html = response.text
+    "fetch done"
     return BeautifulSoup(html, "html.parser")
