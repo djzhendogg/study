@@ -14,7 +14,7 @@ fabric_links = read_txt("fabric_links.txt")
 
 final_df = pd.DataFrame()
 # итерируюсь по листу и собираю айтемы всех фирм в лист
-for fabric_link in fabric_links[:2]:
+for fabric_link in fabric_links:
     try:
         items_in_fabrik_html = make_request(start_link + fabric_link)
         items_in_fabrik_links = list(set(define_links(items_in_fabrik_html, fabric_link)))
