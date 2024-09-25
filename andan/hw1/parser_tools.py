@@ -56,5 +56,19 @@ def make_request(link):
         print(f"An error occured with status {response.status_code}")
     else:
         html = response.text
-    "fetch done"
+    print(f"successfull with {link}")
     return BeautifulSoup(html, "html.parser")
+
+
+def save_file(file_name, list):
+    with open(file_name, 'w') as f:
+        for line in list:
+            f.write(f"{line}\n")
+        print(f"save {file_name}")
+
+
+def read_txt(file_name):
+    my_file = open(file_name, "r")
+    data = my_file.read()
+    link_list = data.split("\n")
+    return link_list
