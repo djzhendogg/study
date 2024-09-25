@@ -51,5 +51,4 @@ for fabric_link in fabric_links:
     except:
         print(f"skip {fabric_link}")
         continue
-
-final_df.to_csv('women_perfume.csv')
+    final_df.to_csv('women_perfume.csv')
