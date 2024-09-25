@@ -5,10 +5,10 @@ import java.util.Scanner;
 public class Reverse {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        List<List<Integer> > listLine = new ArrayList<List<Integer> >();
+        List<List<Integer> > listLine = new ArrayList<>();
         while (in.hasNextLine()) {
             String line = in.nextLine();
-            List<Integer> listInt = new ArrayList<Integer>();
+            List<Integer> listInt = new ArrayList<>();
             Scanner stringScanner = new Scanner(line);
             while (stringScanner.hasNextInt()) {
                 int number = stringScanner.nextInt();
