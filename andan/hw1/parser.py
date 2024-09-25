@@ -8,11 +8,8 @@ from parser_tools import (
 )
 
 
-catalog_links_html = make_request("https://xn--d1ai6ai.xn--p1ai/catalog/women")
 start_link = "https://xn--d1ai6ai.xn--p1ai"
 # собираю весь каталог фирм женских духов в лист
-fabric_links = list(set(define_links(catalog_links_html, "/catalog/women")))
-save_file("fabric_links.txt", fabric_links)
 fabric_links = read_txt("fabric_links.txt")
 
 final_df = pd.DataFrame()
@@ -22,7 +19,7 @@ for fabric_link in fabric_links[:2]:
         items_in_fabrik_html = make_request(start_link + fabric_link)
         items_in_fabrik_links = list(set(define_links(items_in_fabrik_html, fabric_link)))
         save_file("items_in_fabrik_links.txt", items_in_fabrik_links)
-        fabric_links = read_txt("items_in_fabrik_links.txt")
+        items_in_fabrik_links = read_txt("items_in_fabrik_links.txt")
         # итерируюсь по айтемам и собираю инфу в дикт
         for items_in_fabrik_link in items_in_fabrik_links:
             fin_dict = {
@@ -56,4 +53,3 @@ for fabric_link in fabric_links[:2]:
         continue
 
 final_df.to_csv('women_perfume.csv')
-g = pd.read_csv('women_perfume.csv')
