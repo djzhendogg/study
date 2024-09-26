@@ -51,7 +51,7 @@ for fabric_link in fabric_links:
                 fin_dict['price'] = 0
             item_row = pd.DataFrame(fin_dict, index=[0])
             final_df = pd.concat([final_df, item_row], axis=0, ignore_index=True)
+            final_df.to_csv('men_perfume.csv')
     except:
         print(f"skip {fabric_link}")
         continue
-    final_df.to_csv('men_perfume.csv')
