@@ -8,5 +8,6 @@ public class Check {
         char result[] = new char[info.length + data.length];
         System.arraycopy(info, 0, result, 0, info.length);
         System.arraycopy(data, 0, result, info.length, data.length);
+        System.out.println(result);
     }
 }

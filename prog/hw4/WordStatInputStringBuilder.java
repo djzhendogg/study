@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class WordStatInput {
+public class WordStatInputStringBuilder {
     public static void main(String[] args) {
         if (args.length < 2) {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
@@ -11,47 +11,31 @@ public class WordStatInput {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                 new FileInputStream(args[0]),
                 "UTF8"));
-            Map<String, Integer> wordMap = new LinkedHashMap<>();
             try {
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(args[1]),
                     "UTF8"));
                 try {
-                    char[] buffer = new char[4];
+                    char[] buffer = new char[1024];
                     int read = reader.read(buffer);
-                    char[] residue = new char[0];
-                    int start = 0;
-                    int len = 0;
+                    Map<String, Integer> wordMap = new LinkedHashMap<>();
+                    StringBuilder word = new StringBuilder();
                     while (read >= 0) {
-                        char[] fullBuffer;
-                        if (residue.length > 0) {
-                            fullBuffer = new char[residue.length + read];
-                            System.arraycopy(residue, 0, fullBuffer, 0, residue.length);
-                            System.arraycopy(buffer, 0, fullBuffer, residue.length, read);
-                        } else {
-                            fullBuffer = buffer;
-                        }
-                        for (int i = 0; i < fullBuffer.length; i++) {
-                            if (!Character.isLetter(fullBuffer[i]) && fullBuffer[i] != '\'' &&
-                                Character.getType(fullBuffer[i]) != Character.DASH_PUNCTUATION) {
-                                if (start != i) {
-                                    String word = new String(fullBuffer, start, len).toLowerCase();
-                                    wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
+                        for (int i = 0; i < read; i++) {
+                            if (!Character.isLetter(buffer[i]) && buffer[i] != '\'' &&
+                                Character.getType(buffer[i]) != Character.DASH_PUNCTUATION) {
+                                if (!word.isEmpty()) {
+                                    String strWord = word.toString();
+                                    wordMap.put(strWord, wordMap.getOrDefault(strWord, 0) + 1);
                                 }
-                                len = 0;
-                                start = i + 1;
                             } else {
-                                len++;
+                                word.append(buffer[i]);
                             }
                         }
-                        if (len > 0) {
-                            residue = new char[len];
-                            System.arraycopy(fullBuffer, start, residue, 0, len);
-                            len = 0;
-                        } else {
-                            residue = new char[0];
+                        if (!word.isEmpty()) {
+                            String strWord = word.toString();
+                            wordMap.put(strWord, wordMap.getOrDefault(strWord, 0) + 1);
                         }
-                        start = 0;
                         read = reader.read(buffer);
                     }
                     for (String key: wordMap.keySet()) {
