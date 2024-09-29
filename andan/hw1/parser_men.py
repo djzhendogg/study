@@ -8,11 +8,10 @@ from parser_tools import (
 )
 
 
-catalog_links_html = make_request("https://xn--d1ai6ai.xn--p1ai/catalog/men")
+
 start_link = "https://xn--d1ai6ai.xn--p1ai"
-# собираю весь каталог фирм духов в лист
-fabric_links = list(set(define_links(catalog_links_html, "/catalog/men")))
-save_file("fabric_links_men.txt", fabric_links)
+# собираю весь каталог фирм духов в л
+
 fabric_links = read_txt("fabric_links_men.txt")
 
 final_df = pd.DataFrame()
