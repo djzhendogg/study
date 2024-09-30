@@ -21,11 +21,11 @@ df['expiration, mounth'].fillna((df['expiration, mounth'].mean()), inplace=True)
 df['manufacturer'].fillna('no', inplace=True)
 df['country'].fillna('no', inplace=True)
 
-add_flav_columns('flavor_group')
+add_flav_columns(df, 'flavor_group')
 
-complex_upper_notes = make_list_flavor('upper_notes')
-complex_heart_notes = make_list_flavor('heart_notes')
-complex_base_notes = make_list_flavor('base_notes')
+complex_upper_notes = make_list_flavor(df, 'upper_notes')
+complex_heart_notes = make_list_flavor(df, 'heart_notes')
+complex_base_notes = make_list_flavor(df, 'base_notes')
 
 all_notes = list(set(complex_upper_notes+complex_heart_notes+complex_base_notes))
 
