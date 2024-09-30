@@ -14,7 +14,7 @@ def make_list_flavor(df, col_name):
 
 
 def extract_columns(df, col_name):
-    all_flavor_group = make_list_flavor(col_name)
+    all_flavor_group = make_list_flavor(df, col_name)
 
     all_flavor_group_dict_cols = {}
     df_col_flavor_group = df['upper_notes']
@@ -33,6 +33,6 @@ def extract_columns(df, col_name):
 
 
 def add_flav_columns(df, col_name):
-    flavor_group_columns = extract_columns(col_name)
+    flavor_group_columns = extract_columns(df, col_name)
     for i in flavor_group_columns.keys():
         df[i] = flavor_group_columns[i]
