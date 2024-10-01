@@ -15,7 +15,12 @@ def make_list_flavor(df, col_name):
 
 
 def extract_columns(df, col_name):
-    all_flavor_group = make_list_flavor(df, col_name).remove('iso e super')
+    all_flavor_group = make_list_flavor(df, col_name)
+    print(all_flavor_group)
+    if 'iso e super' in all_flavor_group:
+        print(col_name)
+        print(all_flavor_group)
+        all_flavor_group.remove('iso e super')
 
     all_flavor_group_dict_cols = {}
     df_col_flavor_group = df[col_name]
