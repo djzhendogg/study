@@ -1,7 +1,8 @@
 import pandas as pd
 from processing_tools import (
     add_flav_columns,
-    make_list_flavor
+    make_list_flavor,
+    make_one_flavor_group_type
 )
 
 
@@ -21,6 +22,7 @@ df['expiration, mounth'].fillna((df['expiration, mounth'].mean()), inplace=True)
 df['manufacturer'].fillna('no', inplace=True)
 df['country'].fillna('no', inplace=True)
 
+df['flavor_group'] = make_one_flavor_group_type(df)
 add_flav_columns(df, 'flavor_group')
 
 complex_upper_notes = make_list_flavor(df, 'upper_notes')
