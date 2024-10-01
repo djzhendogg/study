@@ -15,18 +15,19 @@ df.drop(df[df['name'].isnull()].index, inplace=True)
 df.drop(df[df['flavor_group'].isnull()].index, inplace=True)
 # сновные фичи для предсказания, если нул, то строки фиктивны
 df.drop(df[df['upper_notes'].isnull() & df['heart_notes'].isnull() & df['base_notes'].isnull()].index, inplace=True)
-
+df.reset_index(drop=True, inplace=True)
 # заполнение пропусков
 df['year'].fillna((df['year'].mean()), inplace=True)
 df['expiration, mounth'].fillna((df['expiration, mounth'].mean()), inplace=True)
 df['manufacturer'].fillna('no', inplace=True)
 df['country'].fillna('no', inplace=True)
+df.reset_index(drop=True, inplace=True)
 
 df['flavor_group'] = make_one_flavor_group_type(df)
 df = add_flav_columns(df, 'flavor_group')
 print(df.shape)
 print(df.columns)
-
+df.reset_index(drop=True, inplace=True)
 complex_upper_notes = make_list_flavor(df, 'upper_notes')
 complex_heart_notes = make_list_flavor(df, 'heart_notes')
 complex_base_notes = make_list_flavor(df, 'base_notes')
