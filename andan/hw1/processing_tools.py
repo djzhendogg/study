@@ -42,6 +42,7 @@ def add_flav_columns(df, col_name):
     flavor_group_columns = extract_columns(df, col_name)
     for i in flavor_group_columns.keys():
         df[i + '_f_g'] = flavor_group_columns[i]
+    return df
 
 
 def make_one_flavor_group_type(df):
