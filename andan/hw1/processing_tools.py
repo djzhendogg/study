@@ -40,7 +40,7 @@ def add_flav_columns(df, col_name):
 
 
 def make_one_flavor_group_type(df):
-    a = list(df['flavor_group'].unique())
+    a = list(df['flavor_group'])
     z = []
     for i in a:
         if pd.notna(i):
