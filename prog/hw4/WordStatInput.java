@@ -8,51 +8,56 @@ public class WordStatInput {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
         }
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                new FileInputStream(args[0]),
-                "UTF8"));
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(
+                    new FileInputStream(args[0]),
+                    "UTF8"
+                )
+            );
+                int BUFFER_SIZE = 4;
             Map<String, Integer> wordMap = new LinkedHashMap<>();
             try {
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(args[1]),
-                    "UTF8"));
+                BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                        new FileOutputStream(args[1]),
+                        "UTF8"
+                    )
+                );
                 try {
-                    char[] buffer = new char[4];
-                    int read = reader.read(buffer);
-                    char[] residue = new char[0];
-                    int start = 0;
-                    int len = 0;
-                    while (read >= 0) {
-                        char[] fullBuffer;
-                        if (residue.length > 0) {
-                            fullBuffer = new char[residue.length + read];
-                            System.arraycopy(residue, 0, fullBuffer, 0, residue.length);
-                            System.arraycopy(buffer, 0, fullBuffer, residue.length, read);
-                        } else {
-                            fullBuffer = buffer;
+                    char[] fullBuffer = new char[0];
+                    int startIndex = 0;
+                    int lastSplitCharIndex = 0;
+
+                    while (true) {
+                        char[] buffer = new char[startIndex + BUFFER_SIZE];
+                        int readedCharNumber = reader.read(buffer, startIndex, BUFFER_SIZE);
+                        if (readedCharNumber < 0) {
+                            break;
                         }
-                        for (int i = 0; i < fullBuffer.length; i++) {
-                            if (!Character.isLetter(fullBuffer[i]) && fullBuffer[i] != '\'' &&
-                                Character.getType(fullBuffer[i]) != Character.DASH_PUNCTUATION) {
-                                if (start != i) {
-                                    String word = new String(fullBuffer, start, len).toLowerCase();
+
+                        System.arraycopy(fullBuffer, lastSplitCharIndex, buffer, 0, startIndex);
+                        fullBuffer = buffer;
+
+                        lastSplitCharIndex = 0;
+
+                        for (int i = startIndex; i < fullBuffer.length; i++) {
+                            if (isSplitChar(fullBuffer[i])) {
+                                if (lastSplitCharIndex != i) {
+                                    String word = new String(
+                                        fullBuffer,
+                                        lastSplitCharIndex,
+                                        i - lastSplitCharIndex
+                                    ).toLowerCase();
                                     wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
                                 }
-                                len = 0;
-                                start = i + 1;
-                            } else {
-                                len++;
+                                lastSplitCharIndex = i + 1;
                             }
                         }
-                        if (len > 0) {
-                            residue = new char[len];
-                            System.arraycopy(fullBuffer, start, residue, 0, len);
-                            len = 0;
-                        } else {
-                            residue = new char[0];
-                        }
-                        start = 0;
-                        read = reader.read(buffer);
+                        startIndex = fullBuffer.length - lastSplitCharIndex;
+                    }
+                    if (startIndex > 0) {
+                        String word = new String(fullBuffer, 0, startIndex).toLowerCase();
+                        wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
                     }
                     for (String key: wordMap.keySet()) {
                         writer.write(key + " " + wordMap.get(key));
@@ -71,5 +76,10 @@ public class WordStatInput {
         } catch (IOException e) {
             System.err.println("Error I/O operation: " + e.getMessage());
         }
+    }
+
+    public static boolean isSplitChar(char character) {
+        return !Character.isLetter(character) && character != '\'' &&
+            Character.getType(character) != Character.DASH_PUNCTUATION;
     }
 }

@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class WordStatInputStringBuilder {
+public class WordStatInput {
     public static void main(String[] args) {
         if (args.length < 2) {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
@@ -22,19 +22,17 @@ public class WordStatInputStringBuilder {
                     StringBuilder word = new StringBuilder();
                     while (read >= 0) {
                         for (int i = 0; i < read; i++) {
-                            if (!Character.isLetter(buffer[i]) && buffer[i] != '\'' &&
-                                Character.getType(buffer[i]) != Character.DASH_PUNCTUATION) {
+                            if (isSplitChar(buffer[i])) {
                                 if (!word.isEmpty()) {
-                                    String strWord = word.toString();
-                                    wordMap.put(strWord, wordMap.getOrDefault(strWord, 0) + 1);
+                                    wordMap.put(word.toString(),
+                                            wordMap.getOrDefault(word.toString(), 0) + 1);
                                 }
                             } else {
                                 word.append(buffer[i]);
                             }
                         }
                         if (!word.isEmpty()) {
-                            String strWord = word.toString();
-                            wordMap.put(strWord, wordMap.getOrDefault(strWord, 0) + 1);
+                            wordMap.put(word.toString(), wordMap.getOrDefault(word.toString(), 0) + 1);
                         }
                         read = reader.read(buffer);
                     }
@@ -55,5 +53,9 @@ public class WordStatInputStringBuilder {
         } catch (IOException e) {
             System.err.println("Error I/O operation: " + e.getMessage());
         }
+    }
+    public static boolean isSplitChar(char character) {
+        return !Character.isLetter(character) && character != '\'' &&
+                Character.getType(character) != Character.DASH_PUNCTUATION;
     }
 }
