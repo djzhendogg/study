@@ -15,7 +15,7 @@ public class WordStatInput {
                 new InputStreamReader(
                     new FileInputStream(args[0]),
                     "UTF8"
-                    )
+                )
             );
             Map<String, Integer> wordMap = new LinkedHashMap<>();
             try {
@@ -23,7 +23,7 @@ public class WordStatInput {
                     new OutputStreamWriter(
                         new FileOutputStream(args[1]),
                         "UTF8"
-                        )
+                    )
                 );
                 try {
                     char[] fullBuffer = new char[0];
@@ -82,6 +82,6 @@ public class WordStatInput {
 
     public static boolean isSplitChar(char character) {
         return !Character.isLetter(character) && character != '\'' &&
-                Character.getType(character) != Character.DASH_PUNCTUATION;
+            Character.getType(character) != Character.DASH_PUNCTUATION;
     }
 }
