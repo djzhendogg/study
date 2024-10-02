@@ -3,6 +3,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class WordStatInput {
+
+    private static final int BUFFER_SIZE = 1024;
+
     public static void main(String[] args) {
         if (args.length < 2) {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
@@ -12,16 +15,15 @@ public class WordStatInput {
                 new InputStreamReader(
                     new FileInputStream(args[0]),
                     "UTF8"
-                )
+                    )
             );
-                int BUFFER_SIZE = 4;
             Map<String, Integer> wordMap = new LinkedHashMap<>();
             try {
                 BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(
                         new FileOutputStream(args[1]),
                         "UTF8"
-                    )
+                        )
                 );
                 try {
                     char[] fullBuffer = new char[0];
@@ -80,6 +82,6 @@ public class WordStatInput {
 
     public static boolean isSplitChar(char character) {
         return !Character.isLetter(character) && character != '\'' &&
-            Character.getType(character) != Character.DASH_PUNCTUATION;
+                Character.getType(character) != Character.DASH_PUNCTUATION;
     }
 }
