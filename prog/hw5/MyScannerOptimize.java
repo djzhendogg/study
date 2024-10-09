@@ -46,7 +46,7 @@ public class MyScannerOptimize {
 
     public boolean hasNext() throws IOException {
         readInBufferIfEmpty();
-        return readedCharNum >= lookupPointer;
+        return readedCharNum > lookupPointer;
     }
 
     public String nextLine() throws IOException {
@@ -69,7 +69,7 @@ public class MyScannerOptimize {
     private String nextItem(boolean isLookup, Pattern pattern) throws IOException {
         StringBuilder line = new StringBuilder();
         boolean isPreviousSpace = true;
-        while (lookupPointer <= readedCharNum) {
+        while (hasNext()) {
             char c = nextChar();
             if (!isSplitChar(c, pattern)) {
                 if (isPreviousSpace) {
