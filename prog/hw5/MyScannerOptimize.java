@@ -28,63 +28,6 @@ public class MyScannerOptimize {
         );
     }
 
-    private void readInBuffer() throws IOException {
-        if (readPointer < lookupPointer) {
-            int offset = buffer.length - readPointer;
-            // TODO: мб сложить следующие 4 строчки метод copyBuffer? Возвращать будем readedCharNum
-            char[] newBuffer = new char[offset + BUFFER_SIZE];
-            readedCharNum = reader.read(newBuffer, offset, BUFFER_SIZE);
-            System.arraycopy(buffer, readPointer, newBuffer, 0, offset);
-            buffer = newBuffer;
-            lookupPointer = offset;
-            readPointer = 0;
-            if (readedCharNum < 0) {
-                readedCharNum = offset;
-            } else {
-                readedCharNum += offset;
-            }
-        } else {
-            buffer = new char[BUFFER_SIZE];
-            readedCharNum = reader.read(buffer);
-            readPointer = 0;
-            lookupPointer = 0;
-        }
-    }
-
-    private void readInBufferIfEmpty() throws IOException {
-        if (lookupPointer >= readedCharNum) {
-            readInBuffer();
-        }
-    }
-
-    private char nextChar() throws IOException {
-        readInBufferIfEmpty();
-        return buffer[lookupPointer++];
-    }
-
-    private String nextItem(boolean isLookup, Pattern pattern) throws IOException {
-        StringBuilder line = new StringBuilder();
-        boolean isPreviousSpace = true;
-        while (lookupPointer <= readedCharNum) {
-            char c = nextChar();
-            if (!isSplitChar(c, pattern)) {
-                if (isPreviousSpace) {
-                    isPreviousSpace = false;
-                }
-                line.append(c);
-            } else if (!isPreviousSpace){
-                break;
-            }
-        }
-
-        if (isLookup) {
-            lookupPointer = readPointer;
-        } else {
-            readPointer = lookupPointer;
-        }
-        return line.toString();
-    }
-
     public String nextWord() throws IOException {
         return nextItem(false, Pattern.WORD);
     }
@@ -92,6 +35,7 @@ public class MyScannerOptimize {
     public boolean hasNextWord() throws IOException {
         return !nextItem(true, Pattern.WORD).isEmpty();
     }
+
     public int nextInt() throws IOException {
         return Integer.parseInt(nextItem(false, Pattern.INTEGER));
     }
@@ -118,6 +62,88 @@ public class MyScannerOptimize {
         return line.toString();
     }
 
+    public void close() throws IOException {
+        reader.close();
+    }
+
+    private String nextItem(boolean isLookup, Pattern pattern) throws IOException {
+        StringBuilder line = new StringBuilder();
+        boolean isPreviousSpace = true;
+        while (lookupPointer <= readedCharNum) {
+            char c = nextChar();
+            if (!isSplitChar(c, pattern)) {
+                if (isPreviousSpace) {
+                    isPreviousSpace = false;
+                }
+                line.append(c);
+            } else if (!isPreviousSpace){
+                break;
+            }
+        }
+
+        if (isLookup) {
+            lookupPointer = readPointer;
+        } else {
+            readPointer = lookupPointer;
+        }
+        return line.toString();
+    }
+
+    private char nextChar() throws IOException {
+        readInBufferIfEmpty();
+        return buffer[lookupPointer++];
+    }
+    private void readInBufferIfEmpty() throws IOException {
+        if (lookupPointer >= readedCharNum) {
+            readInBuffer();
+        }
+    }
+
+    private void readInBuffer() throws IOException {
+        if (readPointer < lookupPointer) {
+            int offset = buffer.length - readPointer;
+            readAndCopyBuffer(offset);
+            lookupPointer = offset;
+            readPointer = 0;
+            if (readedCharNum < 0) {
+                readedCharNum = offset;
+            } else {
+                readedCharNum += offset;
+            }
+        } else {
+            buffer = new char[BUFFER_SIZE];
+            readedCharNum = reader.read(buffer);
+            readPointer = 0;
+            lookupPointer = 0;
+        }
+    }
+
+    private void readAndCopyBuffer(int offset) throws IOException {
+        char[] newBuffer = new char[offset + BUFFER_SIZE];
+        readedCharNum = reader.read(newBuffer, offset, BUFFER_SIZE);
+        System.arraycopy(buffer, readPointer, newBuffer, 0, offset);
+        buffer = newBuffer;
+    }
+
+    private static boolean isInteger(String s) {
+        if (s.isEmpty()) {
+            return false;
+        }
+        int startIndex = 0;
+        if (s.charAt(0) == '-') {
+            if (s.length() == 1) {
+                return false;
+            }
+            startIndex = 1;
+        }
+        for (int i = startIndex; i < s.length(); i++) {
+            if (Character.digit(s.charAt(i), 10) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private boolean isSplitChar(char character, Pattern pattern) {
         if (pattern == Pattern.WORD) {
             return isSplitCharForWord(character);
@@ -130,36 +156,12 @@ public class MyScannerOptimize {
 
     private boolean isSplitCharForWord(char character) {
         return !Character.isLetter(character) && character != '\'' &&
-            Character.getType(character) != Character.DASH_PUNCTUATION;
+                Character.getType(character) != Character.DASH_PUNCTUATION;
     }
 
     private boolean isSplitCharForInt(char character) {
         return !Character.isDigit(character) &&
-            Character.getType(character) != Character.DASH_PUNCTUATION;
-    }
-
-    private static boolean isInteger(String s) {
-        if (s.isEmpty()) {
-            return false;
-        }
-        for (int i = 0; i < s.length(); i++) {
-            // TODO: можно вынести за массив и итерироваться с 1 в таком случае
-            if (i == 0 && s.charAt(i) == '-') {
-                if (s.length() == 1) {
-                    return false;
-                } else {
-                    continue;
-                }
-            }
-            if (Character.digit(s.charAt(i), 10) < 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void close() throws IOException {
-        reader.close();
+                Character.getType(character) != Character.DASH_PUNCTUATION;
     }
 
     private enum Pattern {
