@@ -51,7 +51,7 @@ public class MyScannerOptimize {
 
     public String nextLine() throws IOException {
         StringBuilder line = new StringBuilder();
-        while (lookupPointer <= readedCharNum) {
+        while (hasNext()) {
             char c = nextChar();
             if (Character.getType(c) == Character.CONTROL) {
                 break;
