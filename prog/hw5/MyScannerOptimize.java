@@ -93,6 +93,7 @@ public class MyScannerOptimize {
         readInBufferIfEmpty();
         return buffer[lookupPointer++];
     }
+
     private void readInBufferIfEmpty() throws IOException {
         if (lookupPointer >= readedCharNum) {
             readInBuffer();
