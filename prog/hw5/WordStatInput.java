@@ -11,7 +11,7 @@ public class WordStatInput {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
         }
         try {
-            MyScanner reader = new MyScanner(new FileInputStream(args[0]));
+            MyScannerOptimize reader = new MyScannerOptimize(new FileInputStream(args[0]));
             Map<String, Integer> wordMap = new LinkedHashMap<>();
             try {
                 BufferedWriter writer = new BufferedWriter(
