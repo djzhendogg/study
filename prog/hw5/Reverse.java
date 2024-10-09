@@ -39,7 +39,7 @@ public class Reverse {
                 in.close();
             }
         } catch (IOException e) {
-            System.err.println("Error I/O operation: " + e.getMessage());
+            System.err.println("Error I/O operation: " + Arrays.toString(e.getStackTrace()));
         }
     }
 }

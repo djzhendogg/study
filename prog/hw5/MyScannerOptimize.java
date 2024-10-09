@@ -67,7 +67,7 @@ public class MyScannerOptimize {
     }
 
     private String nextItem(boolean isLookup, Pattern pattern) throws IOException {
-        StringBuilder line = new StringBuilder();
+        StringBuilder  line = new StringBuilder();
         boolean isPreviousSpace = true;
         while (hasNext()) {
             char c = nextChar();
