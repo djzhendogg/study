@@ -28,25 +28,25 @@ public class WordStatInput {
                         writer.newLine();
                     }
                 } catch (IOException e) {
-                    System.err.println("Error I/O operation: " + Arrays.toString(e.getStackTrace()));
+                    System.err.println("Error I/O operation in read functions: " + Arrays.toString(e.getStackTrace()));
                 } finally {
                     writer.close();
                 }
             } catch (FileNotFoundException e) {
-                System.err.println("File not found error: " + Arrays.toString(e.getStackTrace()));
+                System.err.println("Write file not found: " + Arrays.toString(e.getStackTrace()));
             } catch (UnsupportedEncodingException e) {
-                System.err.println("Encoding is not supported: " + Arrays.toString(e.getStackTrace()));
+                System.err.println("Writer encoding is not supported: " + Arrays.toString(e.getStackTrace()));
             } catch (IOException e) {
-                System.err.println("Error I/O operation: " + Arrays.toString(e.getStackTrace()));
+                System.err.println("Error I/O operation for writer: " + Arrays.toString(e.getStackTrace()));
             } finally {
                 reader.close();
             }
         } catch (FileNotFoundException e) {
-            System.err.println("File not found error: " + Arrays.toString(e.getStackTrace()));
+            System.err.println("Read file found error: " + Arrays.toString(e.getStackTrace()));
         } catch (UnsupportedEncodingException e) {
-            System.err.println("Encoding is not supported: " + Arrays.toString(e.getStackTrace()));
+            System.err.println("Reader encoding is not supported: " + Arrays.toString(e.getStackTrace()));
         } catch (IOException e) {
-            System.err.println("Error I/O operation: " + Arrays.toString(e.getStackTrace()));
+            System.err.println("Error I/O operation for reader: " + Arrays.toString(e.getStackTrace()));
         }
     }
 }

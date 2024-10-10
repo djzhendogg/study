@@ -11,20 +11,20 @@ public class MyScannerOptimize {
 
     public MyScannerOptimize(InputStream input) throws UnsupportedEncodingException {
         this.reader = new BufferedReader(
-            new InputStreamReader(
-                input,
-                "UTF8"
-            )
+                new InputStreamReader(
+                        input,
+                        "UTF8"
+                )
         );
     }
 
     public MyScannerOptimize(String input) throws UnsupportedEncodingException {
         InputStream stream = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
         this.reader = new BufferedReader(
-            new InputStreamReader(
-                stream,
-                "UTF8"
-            )
+                new InputStreamReader(
+                        stream,
+                        "UTF8"
+                )
         );
     }
 
@@ -50,16 +50,18 @@ public class MyScannerOptimize {
     }
 
     public String nextLine() throws IOException {
-        StringBuilder line = new StringBuilder();
+        int len = 0;
         while (hasNext()) {
             char c = nextChar();
             if (Character.getType(c) == Character.CONTROL) {
                 break;
             }
-            line.append(c);
+            len++;
         }
+        String line = new String(buffer,readPointer, len);
+
         readPointer = lookupPointer;
-        return line.toString();
+        return line;
     }
 
     public void close() throws IOException {
@@ -67,26 +69,31 @@ public class MyScannerOptimize {
     }
 
     private String nextItem(boolean isLookup, Pattern pattern) throws IOException {
-        StringBuilder  line = new StringBuilder();
         boolean isPreviousSpace = true;
+        int len = 0;
         while (hasNext()) {
             char c = nextChar();
             if (!isSplitChar(c, pattern)) {
                 if (isPreviousSpace) {
                     isPreviousSpace = false;
                 }
-                line.append(c);
+                len++;
             } else if (!isPreviousSpace){
                 break;
+            } else {
+                readPointer++;
             }
         }
-
+        if (len == 0) {
+            return "";
+        }
+        String item = new String(buffer,readPointer, len);
         if (isLookup) {
             lookupPointer = readPointer;
         } else {
             readPointer = lookupPointer;
         }
-        return line.toString();
+        return item;
     }
 
     private char nextChar() throws IOException {

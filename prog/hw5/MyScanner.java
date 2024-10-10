@@ -55,7 +55,47 @@ public class MyScanner {
         }
         return buffer[fakePointer++];
     }
-
+//    public String nextLine() throws IOException {
+//        int len = 0;
+//        while (hasNext()) {
+//            char c = nextChar();
+//            if (Character.getType(c) == Character.CONTROL) {
+//                break;
+//            }
+//            len++;
+//        }
+//        String line = new String(buffer,readPointer, len);
+//
+//        readPointer = lookupPointer;
+//        return line;
+//    }
+    //    private String nextItem(boolean isLookup, Pattern pattern) throws IOException {
+//        boolean isPreviousSpace = true;
+//        int len = 0;
+//        while (hasNext()) {
+//            char c = nextChar();
+//            if (!isSplitChar(c, pattern)) {
+//                if (isPreviousSpace) {
+//                    isPreviousSpace = false;
+//                }
+//                len++;
+//            } else if (!isPreviousSpace){
+//                break;
+//            } else {
+//                readPointer++;
+//            }
+//        }
+//        if (len == 0) {
+//            return "";
+//        }
+//        String item = new String(buffer,readPointer, len);
+//        if (isLookup) {
+//            lookupPointer = readPointer;
+//        } else {
+//            readPointer = lookupPointer;
+//        }
+//        return item;
+//    }
 
     public String nextIntItem(boolean fake) throws IOException {
         StringBuilder line = new StringBuilder();
