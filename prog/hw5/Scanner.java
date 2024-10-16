@@ -8,6 +8,7 @@ public class MyScannerOptimize {
     private int readPointer = 0;
     private int lookupPointer = 0;
     private int readedCharNum;
+    private Cache cache = null;
 
     public MyScannerOptimize(InputStream input) throws UnsupportedEncodingException {
         this.reader = new BufferedReader(
@@ -69,6 +70,18 @@ public class MyScannerOptimize {
     }
 
     private String nextItem(boolean isLookup, Pattern pattern) throws IOException {
+        String item;
+        if (cache != null && cache.getPattern() == pattern) {
+            item = cache.getValue();
+            if (isLookup) {
+                lookupPointer = readPointer;
+            } else {
+                readPointer = cache.getCachePointer();
+                lookupPointer = cache.getCachePointer();
+                cache = null;
+            }
+            return item;
+        }
         boolean isPreviousSpace = true;
         int len = 0;
         while (hasNext()) {
@@ -87,8 +100,9 @@ public class MyScannerOptimize {
         if (len == 0) {
             return "";
         }
-        String item = new String(buffer,readPointer, len);
+        item = new String(buffer,readPointer, len);
         if (isLookup) {
+            cache = new Cache(pattern, item, lookupPointer);
             lookupPointer = readPointer;
         } else {
             readPointer = lookupPointer;
@@ -176,4 +190,29 @@ public class MyScannerOptimize {
         WORD,
         INTEGER
     }
+
+    private static class Cache {
+        private final Pattern pattern;
+        private final String value;
+        private final int cachePointer;
+
+        public Cache(Pattern pattern, String value, int cachePointer) {
+            this.pattern = pattern;
+            this.value = value;
+            this.cachePointer = cachePointer;
+        }
+
+        public Pattern getPattern() {
+            return pattern;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public int getCachePointer() {
+            return cachePointer;
+        }
+    }
 }
+
