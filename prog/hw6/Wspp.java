@@ -27,8 +27,8 @@ public class Wspp {
                     }
                     for (Map.Entry<String, IntList> entry : wordMap.entrySet()) {
                         IntList statInfo = entry.getValue();
-                        writer.write(entry.getKey() + " " + statInfo.size);
-                        for (int i = 0; i < statInfo.size; i++) {
+                        writer.write(entry.getKey() + " " + statInfo.size());
+                        for (int i = 0; i < statInfo.size(); i++) {
                             writer.write(" " + statInfo.get(i));
                         }
                         writer.newLine();

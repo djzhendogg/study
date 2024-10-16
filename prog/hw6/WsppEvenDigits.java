@@ -37,10 +37,10 @@ public class WsppEvenDigits {
                     }
                     for (Map.Entry<String, IntList> entry : wordMap.entrySet()) {
                         IntList statInfo = entry.getValue();
-                        writer.write(entry.getKey() + " " + statInfo.size / 2);
+                        writer.write(entry.getKey() + " " + statInfo.size() / 2);
                         int line = 1;
                         int occurency = 0;
-                        for (int i = 0; i < statInfo.size - 1; i += 2) {
+                        for (int i = 0; i < statInfo.size() - 1; i += 2) {
                             if (line == statInfo.get(i + 1)) {
                                 occurency++;
                             } else {

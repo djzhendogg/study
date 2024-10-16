@@ -11,7 +11,7 @@ public class Checker {
         ints.add(2);
         ints.add(2);
 
-        int c = ints.size / 2;
+        int c = ints.size() / 2;
 
         System.out.println(c);
     }
