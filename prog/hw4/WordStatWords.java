@@ -1,9 +1,9 @@
 import java.io.*;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.TreeMap;
+import java.util.Collections;
 
-public class WordStatWordsPrefix {
+public class WordStatWords {
 
     private static final int BUFFER_SIZE = 1024;
 
@@ -18,7 +18,7 @@ public class WordStatWordsPrefix {
                     "UTF8"
                 )
             );
-            Map<String, Integer> wordMap = new LinkedHashMap<>();
+            Map<String, Integer> wordMap = new TreeMap<>(Collections.reverseOrder());
             try {
                 BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(
@@ -49,7 +49,7 @@ public class WordStatWordsPrefix {
                                     String word = new String(
                                         fullBuffer,
                                         lastSplitCharIndex,
-                                        Math.min(3, i - lastSplitCharIndex)
+                                         i - lastSplitCharIndex
                                     ).toLowerCase();
                                     wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
                                 }
@@ -62,8 +62,9 @@ public class WordStatWordsPrefix {
                         String word = new String(fullBuffer, 0, startIndex).toLowerCase();
                         wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
                     }
-                    for (int i = sortedSet.size() - 1; i >= 0; i--) {
-                        writer.write(sortedSet. + " " + wordMap.get(key));
+
+                    for (String key: wordMap.keySet()) {
+                        writer.write(key + " " + wordMap.get(key));
                         writer.newLine();
                     }
                 } finally {

@@ -1,16 +1,14 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-public class WordStatInput {
+public class Wspp {
     public static void main(String[] args) {
         if (args.length < 2) {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
         }
         try {
             Scanner reader = new Scanner(new FileInputStream(args[0]));
-            Map<String, Integer> wordMap = new LinkedHashMap<>();
+            Map<String, List<Integer>> wordMap = new LinkedHashMap<>();
             try {
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(
@@ -19,12 +17,19 @@ public class WordStatInput {
                         )
                 );
                 try {
+                    int state = 1;
                     while (reader.hasNextWord()) {
                         String word = reader.nextWord().toLowerCase();
-                        wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
+                        List<Integer> statList = wordMap.getOrDefault(word, new ArrayList<>());
+                        statList.add(state);
+                        wordMap.put(word, statList);
+                        state++;
                     }
-                    for (String key : wordMap.keySet()) {
-                        writer.write(key + " " + wordMap.get(key));
+                    for (Map.Entry<String, List<Integer>> entry : wordMap.entrySet()) {
+                        writer.write(entry.getKey() + " " + entry.getValue().size());
+                        for (int number: entry.getValue()) {
+                            writer.write(" " + number);
+                        }
                         writer.newLine();
                     }
                 } catch (IOException e) {

@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class WordStatInputBufferWhile {
+public class WordStatInputBufferString {
     public static void main(String[] args) {
         if (args.length < 2) {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");

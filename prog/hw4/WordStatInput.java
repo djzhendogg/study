@@ -11,21 +11,19 @@ public class WordStatInput {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
         }
         try {
-            BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                    new FileInputStream(args[0]),
-                    "UTF8"
-                )
-            );
-            Map<String, Integer> wordMap = new LinkedHashMap<>();
-            try {
-                BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(
-                        new FileOutputStream(args[1]),
-                        "UTF8"
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(args[0]),
+                            "UTF8"
                     )
-                );
-                try {
+            )) {
+                Map<String, Integer> wordMap = new LinkedHashMap<>();
+                try (BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(
+                                new FileOutputStream(args[1]),
+                                "UTF8"
+                        )
+                )) {
                     char[] fullBuffer = new char[0];
                     int startIndex = 0;
                     int lastSplitCharIndex = 0;
@@ -46,9 +44,9 @@ public class WordStatInput {
                             if (isSplitChar(fullBuffer[i])) {
                                 if (lastSplitCharIndex != i) {
                                     String word = new String(
-                                        fullBuffer,
-                                        lastSplitCharIndex,
-                                        i - lastSplitCharIndex
+                                            fullBuffer,
+                                            lastSplitCharIndex,
+                                            i - lastSplitCharIndex
                                     ).toLowerCase();
                                     wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
                                 }
@@ -61,15 +59,11 @@ public class WordStatInput {
                         String word = new String(fullBuffer, 0, startIndex).toLowerCase();
                         wordMap.put(word, wordMap.getOrDefault(word, 0) + 1);
                     }
-                    for (String key: wordMap.keySet()) {
+                    for (String key : wordMap.keySet()) {
                         writer.write(key + " " + wordMap.get(key));
                         writer.newLine();
                     }
-                } finally {
-                    writer.close();
                 }
-            } finally {
-                reader.close();
             }
         } catch (FileNotFoundException e) {
             System.err.println("File not found error: " + e.getMessage());

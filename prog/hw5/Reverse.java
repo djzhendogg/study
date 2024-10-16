@@ -1,11 +1,10 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
 public class Reverse {
     public static void main(String[] args) {
         try {
-            MyScannerOptimize in = new MyScannerOptimize(System.in);
+            Scanner in = new Scanner(System.in);
             try {
                 int[][] listLine = new int[1][];
                 int pointerLine = 0;
@@ -13,7 +12,7 @@ public class Reverse {
                     String line = in.nextLine();
                     int[] listInt = new int[1];
                     int pointerInt = 0;
-                    MyScannerOptimize stringScanner = new MyScannerOptimize(line);
+                    Scanner stringScanner = new Scanner(line);
                     while (stringScanner.hasNextInt()) {
                         if (pointerInt >= listInt.length) {
                             listInt = Arrays.copyOf(listInt, listInt.length * 2);
