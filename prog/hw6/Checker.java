@@ -9,8 +9,10 @@ public class Checker {
 
         ints.add(1);
         ints.add(2);
-        ints.add(3);
+        ints.add(2);
 
-        System.out.println(ints.get(0));
+        int c = ints.size / 2;
+
+        System.out.println(c);
     }
 }

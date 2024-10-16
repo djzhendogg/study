@@ -4,7 +4,7 @@ import java.util.*;
 public class Wspp {
     public static void main(String[] args) {
         if (args.length < 2) {
-            throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
+            throw new IllegalArgumentException("Usage: java Wspp <input_file_name> <output_file_name>");
         }
         try {
             Scanner reader = new Scanner(new FileInputStream(args[0]));

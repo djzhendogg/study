@@ -37,6 +37,14 @@ public class Scanner {
         return !nextItem(true, Pattern.WORD).isEmpty();
     }
 
+    public String nextWordWithDigit() throws IOException {
+        return nextItem(false, Pattern.WORDDIGIT);
+    }
+
+    public boolean hasNextWordWithDigit() throws IOException {
+        return !nextItem(true, Pattern.WORDDIGIT).isEmpty();
+    }
+
     public int nextInt() throws IOException {
         return Integer.parseInt(nextItem(false, Pattern.INTEGER));
     }
@@ -62,7 +70,7 @@ public class Scanner {
         int len = 0;
         while (hasNext()) {
             char c = nextChar();
-            if (Character.getType(c) == Character.CONTROL) {
+            if (c == 10 || c == 13) {
                 break;
             }
             len++;
@@ -177,7 +185,9 @@ public class Scanner {
     private boolean isSplitChar(char character, Pattern pattern) {
         if (pattern == Pattern.WORD) {
             return isSplitCharForWord(character);
-        } else if (pattern == Pattern.INTEGER) {
+        } else if (pattern == Pattern.WORDDIGIT) {
+            return isSplitCharForWordWithDigit(character);
+        }  else if (pattern == Pattern.INTEGER) {
             return isSplitCharForInt(character);
         } else {
             throw new IllegalArgumentException("not supported argument: " + pattern);
@@ -189,6 +199,11 @@ public class Scanner {
                 Character.getType(character) != Character.DASH_PUNCTUATION;
     }
 
+    private boolean isSplitCharForWordWithDigit(char character) {
+        return !Character.isLetterOrDigit(character) && character != '\'' &&
+                Character.getType(character) != Character.DASH_PUNCTUATION;
+    }
+
     private boolean isSplitCharForInt(char character) {
         return !Character.isDigit(character) &&
                 Character.getType(character) != Character.DASH_PUNCTUATION;
@@ -196,7 +211,8 @@ public class Scanner {
 
     private enum Pattern {
         WORD,
-        INTEGER
+        INTEGER,
+        WORDDIGIT
     }
 
     private static class Cache {

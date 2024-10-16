@@ -1,3 +1,3 @@
 #!/bin/bash
 
-javac *.java && java -ea -jar WsppTest.jar Base
+javac *.java && java -ea -jar WsppTest.jar $@

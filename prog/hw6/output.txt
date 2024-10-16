@@ -1,9 +1,10 @@
-monday's 1 1
-child 2 2 8
-is 2 3 9
-fair 1 4
-of 2 5 11
-face 1 6
-tuesday's 1 7
-full 1 10
-grace 1 12
+t 1
+c 1
+xfm 4 2
+eg 1
+nif 1
+l 2
+r 4 5
+cj 3 6
+joh 1
+tp 4 4 7
