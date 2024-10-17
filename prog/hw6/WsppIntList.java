@@ -1,34 +1,35 @@
 import java.io.*;
 import java.util.*;
 
-public class WsppArrayList {
+public class WsppIntList {
     public static void main(String[] args) {
         if (args.length < 2) {
-            throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
+            throw new IllegalArgumentException("Usage: java Wspp <input_file_name> <output_file_name>");
         }
         try {
             Scanner reader = new Scanner(new FileInputStream(args[0]));
-            Map<String, List<Integer>> wordMap = new LinkedHashMap<>();
+            Map<String, IntList> wordMap = new LinkedHashMap<>();
             try {
                 BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(
-                                new FileOutputStream(args[1]),
-                                "UTF8"
-                        )
+                    new OutputStreamWriter(
+                        new FileOutputStream(args[1]),
+                        "UTF8"
+                    )
                 );
                 try {
                     int state = 1;
                     while (reader.hasNextWord()) {
                         String word = reader.nextWord().toLowerCase();
-                        List<Integer> statList = wordMap.getOrDefault(word, new ArrayList<>());
+                        IntList statList = wordMap.getOrDefault(word, new IntList());
                         statList.add(state);
                         wordMap.put(word, statList);
                         state++;
                     }
-                    for (Map.Entry<String, List<Integer>> entry : wordMap.entrySet()) {
-                        writer.write(entry.getKey() + " " + entry.getValue().size());
-                        for (int number: entry.getValue()) {
-                            writer.write(" " + number);
+                    for (Map.Entry<String, IntList> entry : wordMap.entrySet()) {
+                        IntList statInfo = entry.getValue();
+                        writer.write(entry.getKey() + " " + statInfo.size());
+                        for (int i = 0; i < statInfo.size(); i++) {
+                            writer.write(" " + statInfo.get(i));
                         }
                         writer.newLine();
                     }
