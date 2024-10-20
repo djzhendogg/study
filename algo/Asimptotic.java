@@ -1,7 +1,6 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
-public class DrinkingGame {
+public class Asimptotic {
     public static void main(String[] args) {
         Scanner in  = new Scanner(System.in);
         String function = in.nextLine();
