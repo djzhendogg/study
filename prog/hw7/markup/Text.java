@@ -1,9 +1,9 @@
 package markup;
 
-public class Text implements TextElement{
+public class Text implements TextElement {
     private final String text;
 
-    protected Text(String text) {
+    public Text(String text) {
         this.text = text;
     }
 

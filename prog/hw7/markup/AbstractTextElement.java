@@ -2,22 +2,17 @@ package markup;
 
 import java.util.List;
 
-public class AbstractTextElement implements TextElement{
-    protected List<TextElement> textElements;
-    protected String separator;
+public abstract class AbstractTextElement implements TextElement {
+    List<TextElement> textElements;
 
-    protected AbstractTextElement(final List<TextElement> textElements, final String separator) {
+    protected AbstractTextElement(List<TextElement> textElements) {
         this.textElements = textElements;
-        this.separator = separator;
     }
 
     @Override
     public void toMarkdown(StringBuilder stringBuilder) {
-        stringBuilder.append(separator);
         for (TextElement textElement : textElements) {
             textElement.toMarkdown(stringBuilder);
         }
-        stringBuilder.append(separator);
     }
-
 }
