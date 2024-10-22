@@ -1,0 +1,14 @@
+package markup;
+
+public class Text implements TextElement{
+    private final String text;
+
+    protected Text(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public void toMarkdown(StringBuilder stringBuilder) {
+        stringBuilder.append(text);
+    }
+}
