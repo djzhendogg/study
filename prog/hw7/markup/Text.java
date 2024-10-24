@@ -11,4 +11,9 @@ public class Text implements TextElement {
     public void toMarkdown(StringBuilder stringBuilder) {
         stringBuilder.append(text);
     }
+
+    @Override
+    public void toTypst(StringBuilder stringBuilder) {
+        stringBuilder.append(text);
+    }
 }

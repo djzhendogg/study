@@ -2,10 +2,10 @@ package markup;
 
 import java.util.List;
 
-public abstract class AbstractTextElement implements TextElement {
+public abstract class AbstractTextIterator implements TextElement {
     List<TextElement> textElements;
 
-    protected AbstractTextElement(List<TextElement> textElements) {
+    protected AbstractTextIterator(List<TextElement> textElements) {
         this.textElements = textElements;
     }
 
@@ -13,6 +13,13 @@ public abstract class AbstractTextElement implements TextElement {
     public void toMarkdown(StringBuilder stringBuilder) {
         for (TextElement textElement : textElements) {
             textElement.toMarkdown(stringBuilder);
+        }
+    }
+
+    @Override
+    public void toTypst(StringBuilder stringBuilder) {
+        for (TextElement textElement : textElements) {
+            textElement.toTypst(stringBuilder);
         }
     }
 }

@@ -19,7 +19,7 @@ public class Test {
 //                ))
 //        ));
 //        StringBuilder s = new StringBuilder();
-//        paragraph.toMarkdown(s);
+//        paragraph.toTypst(s);
 //        System.out.println(s);
 //    }
 }
