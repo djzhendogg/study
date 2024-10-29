@@ -1,0 +1,7 @@
+SCName(StudentName, CourseName) :-
+	Students(_, StudentName, GroupId),
+	Plan(GroupId, CourseId, LecturerId),
+	Groups(GroupId, _, GroupFacultyId),
+	Lecturers(LecturerId, _, LecturerFacultyId),
+	Courses(CourseId, CourseName),
+	GroupFacultyId ≠ LecturerFacultyId.

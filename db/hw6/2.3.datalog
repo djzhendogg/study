@@ -1,0 +1,7 @@
+StudentInfoByFacultyName(StudentId, StudentName, GroupName) :-
+	Students(StudentId, StudentName, GroupId),
+	Groups(GroupId, GroupName, GroupFacultyId),
+	Faculties(FacultyId, _, DeanId),
+	Lecturers(LecturerId, :LecturerName, _),
+	DeanId = LecturerId,
+	GroupFacultyId = FacultyId.

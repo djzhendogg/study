@@ -1,0 +1,9 @@
+HasMark(StudentId, CourseId) :- Marks(StudentId, CourseId, _).
+NoMark(StudentId) :-
+	Students(StudentId, _, _),
+	Plan(_, CourseId, LecturerId),
+	Lecturers(LecturerId, :LecturerName, _),
+	¬ HasMark(StudentId, CourseId).
+AllMark(StudentId) :-
+	Students(StudentId, _, _),
+	¬ NoMark(StudentId).

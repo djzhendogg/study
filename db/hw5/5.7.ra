@@ -1,0 +1,1 @@
+π{StudentName, CourseName}(Students ⋈ σ{DeanId = LecturerId}(Plan ⋈ ρ{FacultyId=GroupFacultyId}(Groups) ⋈ Faculties) ⋈ Courses)

@@ -1,0 +1,6 @@
+HasGrage(StudentId) :- Marks(StudentId, :CourseId, Mark).
+NoGrade(StudentId, StudentName, GroupName) :-
+	Students(StudentId, StudentName, GroupId),
+	Groups(GroupId, GroupName, _),
+	Plan(GroupId, :CourseId, _),
+	¬ HasGrage(StudentId).

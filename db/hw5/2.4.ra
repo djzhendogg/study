@@ -1,0 +1,1 @@
+pi{StudentId, StudentName, GroupName}(sigma{FacultyName = :FacultyName}(Students nj rho{FacultyId=GroupFacultyId}(Groups) nj Faculties))
