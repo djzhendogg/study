@@ -62,7 +62,7 @@ public class Scanner {
         int len = 0;
         while (hasNext()) {
             char c = nextChar();
-            if (Character.getType(c) == Character.CONTROL) {
+            if (c == 10 || c == 13) {
                 break;
             }
             len++;

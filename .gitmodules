@@ -1,0 +1,6 @@
+[submodule "prog-intro"]
+	path = prog-intro
+	url = https://www.kgeorgiy.info/git-students/year2024/Din_Evgeniia/prog-intro
+[submodule "prog-intro-2024"]
+	path = prog-intro-2024
+	url = https://www.kgeorgiy.info/git/geo/prog-intro-2024.git
