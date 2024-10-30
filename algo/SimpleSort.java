@@ -18,11 +18,14 @@ public class SimpleSort {
                         if (Character.isWhitespace(c) && !str.isEmpty()) {
                             array[pointer++] = Integer.parseInt(str.toString());
                             str.setLength(0);
-                        } else {
+                        } else if (!(c == 0)) {
                             str.append(c);
                         }
                     }
                     readedCharNum = reader.read(buffer);
+                }
+                if (!str.isEmpty() && pointer < n) {
+                    array[pointer] = Integer.parseInt(str.toString());
                 }
                 quickSort(array, 0, n - 1);
                 for (int i : array) {
@@ -61,4 +64,5 @@ public class SimpleSort {
         quickSort(arr, left, j);
         quickSort(arr, j + 1, right);
     }
+
 }
