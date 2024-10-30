@@ -19,7 +19,7 @@ public class ReadNumbers {
                         if (Character.isWhitespace(c) && !str.isEmpty()) {
                             array[pointer++] = Integer.parseInt(str.toString());
                             str.setLength(0);
-                        } else if (!(c == 0)) {
+                        } else if (Character.isDigit(c)|| c == '-' || c == '+') {
                             str.append(c);
                         }
                     }
