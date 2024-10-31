@@ -18,16 +18,16 @@ public class FastSearch {
             int r = in.nextInt();
             int lBound = binarySearchRight(arr, l);
             int rBound = binarySearchLeft(arr, r);
-            System.out.println(lBound - rBound + 1);
+            System.out.println(rBound - lBound + 1);
         }
     }
 
-    public static boolean checkRight(int[] arr, int x, int mid) {
+    public static boolean checkRight(int[] arr, int mid, int x) {
         return arr[mid] >= x;
     }
 
-    public static boolean checkLeft(int[] arr, int x, int mid) {
-        return arr[mid] < x;
+    public static boolean checkLeft(int[] arr, int mid, int x) {
+        return arr[mid] <= x;
     }
 
     public static int binarySearchRight(int[] arr, int x) {
@@ -35,7 +35,7 @@ public class FastSearch {
         int right = arr.length;
         while (right - left > 1) {
             int mid = (left + right) / 2;
-            if (checkRight(arr, mid, right)) {
+            if (checkRight(arr, mid, x)) {
                 right = mid;
             } else {
                 left = mid;
@@ -49,10 +49,10 @@ public class FastSearch {
         int right = arr.length;
         while (right - left > 1) {
             int mid = (left + right) / 2;
-            if (checkLeft(arr, mid, right)) {
-                right = mid;
-            } else {
+            if (checkLeft(arr, mid, x)) {
                 left = mid;
+            } else {
+                right = mid;
             }
         }
         return left;

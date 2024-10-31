@@ -1,14 +1,27 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 
-public class Checker {
+public class AproxBinSearch {
     public static void main(String[] args) {
-//        List<Integer> first = new ArrayList<>(2_000_00);
-        int[] a = new int[] {2, 4, 5, 10};
-        System.out.println(a[binarySearchLeft(a, 7)]);
-        System.out.println(a[binarySearchRight(a, 7)]);
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int k = in.nextInt();
+        int[] base = new int[n];
+        for (int i = 0; i < n; i++) {
+            base[i] = in.nextInt();
+        }
+        for (int i = 0; i < k; i++) {
+            int x = in.nextInt();
+            int l = base[binarySearchLeft(base, x)];
+            int r = base[binarySearchRight(base, x)];
+            if (Math.abs(x - l) > Math.abs(x - r)) {
+                System.out.println(r);
+            } else if (Math.abs(x - l) < Math.abs(x - r)) {
+                System.out.println(l);
+            } else {
+                System.out.println(Math.min(r, l));
+            }
+        }
     }
-
     public static boolean checkRight(int[] arr, int mid, int x) {
         return arr[mid] >= x;
     }
