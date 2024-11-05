@@ -1,39 +1,19 @@
-import java.io.*;
 import java.util.Random;
+import java.util.Scanner;
 
 public class SimpleSort {
     public static void main(String[] args) {
-        final int BUFFER_SIZE = 2048;
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            try {
-                int n = Integer.parseInt(reader.readLine());
-                char[] buffer = new char[BUFFER_SIZE];
-                int[] array = new int[n];
-                int pointer = 0;
-                int readedCharNum = reader.read(buffer);
-                StringBuilder str = new StringBuilder();
-                while (readedCharNum >= 0) {
-                    for (char c : buffer) {
-                        if (Character.isWhitespace(c) && !str.isEmpty()) {
-                            array[pointer++] = Integer.parseInt(str.toString());
-                            str.setLength(0);
-                        } else {
-                            str.append(c);
-                        }
-                    }
-                    readedCharNum = reader.read(buffer);
-                }
-                quickSort(array, 0, n - 1);
-                for (int i : array) {
-                    System.out.print(i + " ");
-                }
-            } finally {
-            reader.close();
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int[] array = new int[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = in.nextInt();
         }
+        quickSort(array, 0, n - 1);
+        for (int i : array) {
+            System.out.print(i + " ");
+        }
+
     }
     public static void quickSort(int[] arr, int left, int right) {
         if (left >= right) {
