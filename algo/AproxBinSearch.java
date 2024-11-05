@@ -41,6 +41,9 @@ public class AproxBinSearch {
                 left = mid;
             }
         }
+        if (right >= arr.length) {
+            right = arr.length - 1;
+        }
         return right;
     }
 
@@ -54,6 +57,9 @@ public class AproxBinSearch {
             } else {
                 right = mid;
             }
+        }
+        if (left < 0) {
+            left = 0;
         }
         return left;
     }
