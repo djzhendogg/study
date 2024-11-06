@@ -111,7 +111,7 @@ public class BlockReader {
         Pattern nowP;
         for (int i = 0; i < line.length(); i++) {
             if (line.charAt(i) == '\\') {
-                i++;
+                line = line.replace("\\", "");
                 continue;
             }
             if (i + 1 < line.length()) {
