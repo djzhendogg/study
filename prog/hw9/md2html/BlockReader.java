@@ -19,12 +19,13 @@ public class BlockReader {
     }
 
     public StringBuilder nextBlock() throws IOException {
-        List<TextElement> rowParagraph = new ArrayList<>();
+        List<TextElement> rowParagraph;
         String line = reader.readLine();
         boolean previosLine = false;
         boolean isHeader = false;
         int headerLevel = 0;
         StringBuilder s = new StringBuilder();
+        StringBuilder bigLine = new StringBuilder();
         AbstractTextDecorator finalParagraph;
 
         if (line != null && line.isEmpty()) {
@@ -35,10 +36,9 @@ public class BlockReader {
 
         while (line != null && !line.isEmpty()) {
             if (previosLine) {
-                rowParagraph.add(new Text("\n"));
+                bigLine.append("\n");
             }
             line = toEscapedString(line);
-            List<TextElement> toIntegrate;
             // for header
             if (!previosLine && line.startsWith("#")) {
                 while (line.charAt(headerLevel) == '#') {
@@ -48,16 +48,14 @@ public class BlockReader {
                     isHeader = true;
                 }
             }
-            if (!previosLine && isHeader) {
-                toIntegrate = lineChecker(line.substring(headerLevel + 1));
-            } else {
-                toIntegrate = lineChecker(line);
-            }
-
-            // for paragraph
-            rowParagraph.addAll(toIntegrate);
             previosLine = true;
+            bigLine.append(line);
             line = reader.readLine();
+        }
+        if (isHeader) {
+            rowParagraph = lineChecker(bigLine.substring(headerLevel + 1));
+        } else {
+            rowParagraph = lineChecker(bigLine.toString());
         }
 
         if (line == null) {
@@ -102,8 +100,7 @@ public class BlockReader {
 //        TODO: экранированние
         return str.replace("&", "&amp;")
                 .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\\", "");
+                .replace(">", "&gt;");
     }
 
     public List<TextElement> lineChecker(String line) {
@@ -113,6 +110,10 @@ public class BlockReader {
         int pointer = 0;
         Pattern nowP;
         for (int i = 0; i < line.length(); i++) {
+            if (line.charAt(i) == '\\') {
+                i++;
+                continue;
+            }
             if (i + 1 < line.length()) {
                 nowP = whatToken(line.charAt(i), line.charAt(i + 1));
             } else {
