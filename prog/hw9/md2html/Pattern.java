@@ -3,10 +3,9 @@ package md2html;
 import md2html.markup.*;
 
 import java.util.List;
-import java.util.Objects;
 
 public enum Pattern {
-    //TODO: как правильно назвать
+    //TODO: переделать в классы
     EMPHASIS_STAR(0, "*") {
         public TextElement create(List<TextElement> textElements) {
             return new Emphasis(textElements);
@@ -41,7 +40,7 @@ public enum Pattern {
     private final int len;
     private final String separator;
 
-    private Pattern(int len, String separator) {
+    Pattern(int len, String separator) {
         this.len = len;
         this.separator = separator;
     }

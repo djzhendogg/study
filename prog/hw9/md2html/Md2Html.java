@@ -9,7 +9,7 @@ public class Md2Html {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
         }
         try {
-            BlockReader reader = new BlockReader(
+            MarkDownBlockReader reader = new MarkDownBlockReader(
                     new FileInputStream(args[0]));
             try {
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
