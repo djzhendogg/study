@@ -18,8 +18,8 @@ public class Md2Html {
                 try {
                     while (reader.hasNext()) {
                         StringBuilder a = reader.nextBlock();
-                        System.out.println(a.toString());
-                        System.out.println("----------------------------------");
+                        writer.write(a.toString());
+                        writer.newLine();
                     }
                 } finally {
                     writer.close();

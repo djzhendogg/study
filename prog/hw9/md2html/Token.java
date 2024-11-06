@@ -26,4 +26,16 @@ public class Token {
     public void update(TextElement el) {
         textElements.add(el);
     }
+
+    public TextElement getTextElement(int index) {
+        return textElements.get(index);
+    }
+
+    public int getLength() {
+        return textElements.size();
+    }
+
+    public List<TextElement> getTextElementList() {
+        return textElements;
+    }
 }
