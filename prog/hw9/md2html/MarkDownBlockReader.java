@@ -95,13 +95,11 @@ public class MarkDownBlockReader {
     private List<TextElement> transformToTextElements(String line) {
         TokenStack tokenStack = new TokenStack();
         int pointer = 0;
-        StringBuilder lineAppender = new StringBuilder();
 
         for (int i = 0; i < line.length(); i++) {
             AbstractPattern currentPattern;
             if (line.charAt(i) == '\\') {
-                lineAppender.append(line, pointer, i);
-                tokenStack.addRowText(lineAppender.toString());
+                tokenStack.addRowText(line.substring(pointer, i));
                 i++;
                 pointer = i;
                 continue;
@@ -112,10 +110,8 @@ public class MarkDownBlockReader {
                 continue;
             }
 
-            lineAppender.append(line, pointer, i);
+            tokenStack.addRowText(line.substring(pointer, i));
             i += currentPattern.getAdditionalLen();
-            tokenStack.addRowText(lineAppender.toString());
-            lineAppender.setLength(0);
             pointer = i + 1;
             boolean patternNotExists = tokenStack.add(currentPattern);
             if (patternNotExists) {
