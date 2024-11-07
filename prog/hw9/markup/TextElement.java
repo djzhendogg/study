@@ -1,4 +1,4 @@
-package md2html.markup;
+package markup;
 
 public interface TextElement {
 

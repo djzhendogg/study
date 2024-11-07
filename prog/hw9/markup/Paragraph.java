@@ -1,4 +1,4 @@
-package md2html.markup;
+package markup;
 
 import java.util.List;
 

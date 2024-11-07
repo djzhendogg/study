@@ -1,6 +1,6 @@
 package md2html.patterns;
 
-import md2html.markup.TextElement;
+import markup.TextElement;
 
 import java.util.List;
 

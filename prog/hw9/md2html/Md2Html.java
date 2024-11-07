@@ -1,6 +1,6 @@
 package md2html;
 
-import md2html.markup.AbstractTextDecorator;
+import markup.AbstractTextDecorator;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

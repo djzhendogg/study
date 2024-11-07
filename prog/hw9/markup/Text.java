@@ -1,4 +1,4 @@
-package md2html.markup;
+package markup;
 
 public class Text implements TextElement {
     private final String text;

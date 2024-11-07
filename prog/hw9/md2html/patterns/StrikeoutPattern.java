@@ -1,8 +1,7 @@
 package md2html.patterns;
 
-import md2html.markup.Code;
-import md2html.markup.Strikeout;
-import md2html.markup.TextElement;
+import markup.Strikeout;
+import markup.TextElement;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package md2html;
 
-import md2html.markup.Text;
-import md2html.markup.TextElement;
+import markup.Text;
+import markup.TextElement;
 import md2html.patterns.AbstractPattern;
 
 import java.util.ArrayList;

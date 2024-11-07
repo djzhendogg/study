@@ -1,7 +1,7 @@
 package md2html.patterns;
 
-import md2html.markup.Emphasis;
-import md2html.markup.TextElement;
+import markup.Emphasis;
+import markup.TextElement;
 
 import java.util.List;
 

@@ -1,10 +1,5 @@
 package md2html;
 
-import md2html.markup.*;
-
-import java.io.*;
-import java.util.*;
-
 public class Checker {
 //    private BufferedReader reader;
 //    private boolean closed = false;

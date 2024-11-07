@@ -1,9 +1,9 @@
 package md2html;
 
-import md2html.markup.AbstractTextDecorator;
-import md2html.markup.Header;
-import md2html.markup.Paragraph;
-import md2html.markup.TextElement;
+import markup.AbstractTextDecorator;
+import markup.Header;
+import markup.Paragraph;
+import markup.TextElement;
 import md2html.patterns.*;
 
 import java.io.*;
