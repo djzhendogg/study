@@ -8,7 +8,7 @@ import md2html.patterns.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.*;
 
 public class MarkDownBlockReader {
     private final BufferedReader reader;
@@ -32,13 +32,12 @@ public class MarkDownBlockReader {
         boolean isHeader = false;
         int headerLevel = 0;
 
-        StringBuilder block = readBlock();
-        block = toEscapedString(block);
-        if (block.toString().startsWith("#")) {
-            while (block.charAt(headerLevel) == '#') {
+        String block = toEscapedString(readBlock());
+        if (block.startsWith("#")) {
+            while (headerLevel < block.length() && block.charAt(headerLevel) == '#') {
                 headerLevel++;
             }
-            if (Character.isWhitespace(block.charAt(headerLevel))) {
+            if (headerLevel < block.length() && Character.isWhitespace(block.charAt(headerLevel))) {
                 isHeader = true;
             }
         }
@@ -47,7 +46,7 @@ public class MarkDownBlockReader {
             rowParagraph = transformToTextElements(block.substring(headerLevel + 1));
             finalParagraph = new Header(rowParagraph, headerLevel);
         } else {
-            rowParagraph = transformToTextElements(block.toString());
+            rowParagraph = transformToTextElements(block);
             finalParagraph = new Paragraph(rowParagraph);
         }
 
@@ -69,15 +68,13 @@ public class MarkDownBlockReader {
 
         String line = reader.readLine();
 
-        if (line != null && line.isEmpty()) {
-            while (line.isEmpty()) {
-                line = reader.readLine();
-            }
+        while (line != null && line.isEmpty()) {
+            line = reader.readLine();
         }
 
         while (line != null && !line.isEmpty()) {
             if (previosLine) {
-                textBlock.append("\n");
+                textBlock.append(System.lineSeparator());
             }
             previosLine = true;
             textBlock.append(line);
@@ -91,7 +88,7 @@ public class MarkDownBlockReader {
     }
 
     private List<TextElement> transformToTextElements(String line) {
-        TokenQueue tokenQueue = new TokenQueue();
+        TokenStack tokenStack = new TokenStack();
         int pointer = 0;
 
         for (int i = 0; i < line.length(); i++) {
@@ -108,17 +105,17 @@ public class MarkDownBlockReader {
             }
 
             i += currentPattern.getAdditionalLen();
-            tokenQueue.addRowText(line.substring(pointer, i - currentPattern.getAdditionalLen()));
+            tokenStack.addRowText(line.substring(pointer, i - currentPattern.getAdditionalLen()));
             pointer = i + 1;
-            boolean success = tokenQueue.add(currentPattern);
-            if (success) {
+            boolean patternNotExists = tokenStack.add(currentPattern);
+            if (patternNotExists) {
                 continue;
             }
-            tokenQueue.pushDown(currentPattern);
+            tokenStack.pushDown(currentPattern);
         }
-        tokenQueue.removeDummyNesting(null);
-        tokenQueue.addRowText(line.substring(pointer));
-        return tokenQueue.getFistTokenList();
+        tokenStack.removeDummyNesting(null);
+        tokenStack.addRowText(line.substring(pointer));
+        return tokenStack.getFistTokenList();
     }
 
     private AbstractPattern takePattern(String line, int index) {
@@ -131,25 +128,21 @@ public class MarkDownBlockReader {
         return null;
     }
 
-    private StringBuilder toEscapedString(StringBuilder str) {
+    private String toEscapedString(StringBuilder str) {
         StringBuilder escapedStr = new StringBuilder();
+        Set<Character> unescapedCharacters = new HashSet<>(Set.of('&', '<', '>'));
+        Map<Character, String> replaceCharacters = new HashMap<>(
+            Map.of('&' , "&amp;", '<' , "&lt;",'>' , "&gt;")
+        );
         int start = 0;
         for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == '&') {
+            if (unescapedCharacters.contains(str.charAt(i))) {
                 escapedStr.append(str, start, i);
-                escapedStr.append("&amp;");
-                start = i + 1;
-            } else if (str.charAt(i) == '<') {
-                escapedStr.append(str, start, i);
-                escapedStr.append("&lt;");
-                start = i + 1;
-            } else if (str.charAt(i) == '>') {
-                escapedStr.append(str, start, i);
-                escapedStr.append("&gt;");
+                escapedStr.append(replaceCharacters.get(str.charAt(i)));
                 start = i + 1;
             }
         }
         escapedStr.append(str, start, str.length());
-        return escapedStr;
+        return escapedStr.toString();
     }
 }

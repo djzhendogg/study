@@ -10,7 +10,7 @@ public class TextBlock {
     private final List<TextElement> textElements = new ArrayList<>();
     private final AbstractPattern pattern;
 
-    protected TextBlock(AbstractPattern pattern) {
+    public TextBlock(AbstractPattern pattern) {
         this.pattern = pattern;
     }
 
