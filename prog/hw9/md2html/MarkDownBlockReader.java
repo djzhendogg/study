@@ -19,7 +19,12 @@ public class MarkDownBlockReader {
             new StrikeoutPattern(),
             new EmphasisStarPattern(),
             new EmphasisUnderscorePattern(),
-            new CodePattern()
+            new CodePattern(),
+            new MarkPattern()
+    );
+    private final Set<Character> unescapedCharacters = new HashSet<>(Set.of('&', '<', '>'));
+    private final Map<Character, String> replaceCharacters = new HashMap<>(
+            Map.of('&' , "&amp;", '<' , "&lt;",'>' , "&gt;")
     );
 
     public MarkDownBlockReader(InputStream input) throws UnsupportedEncodingException {
@@ -94,18 +99,19 @@ public class MarkDownBlockReader {
         for (int i = 0; i < line.length(); i++) {
             AbstractPattern currentPattern;
             if (line.charAt(i) == '\\') {
-                line = line.substring(0, i) + line.substring(i + 1);
+                tokenStack.addRowText(line.substring(pointer, i));
+                i++;
+                pointer = i;
                 continue;
             }
 
             currentPattern = takePattern(line, i);
-
             if (currentPattern == null) {
                 continue;
             }
 
+            tokenStack.addRowText(line.substring(pointer, i));
             i += currentPattern.getAdditionalLen();
-            tokenStack.addRowText(line.substring(pointer, i - currentPattern.getAdditionalLen()));
             pointer = i + 1;
             boolean patternNotExists = tokenStack.add(currentPattern);
             if (patternNotExists) {
@@ -130,10 +136,6 @@ public class MarkDownBlockReader {
 
     private String toEscapedString(StringBuilder str) {
         StringBuilder escapedStr = new StringBuilder();
-        Set<Character> unescapedCharacters = new HashSet<>(Set.of('&', '<', '>'));
-        Map<Character, String> replaceCharacters = new HashMap<>(
-            Map.of('&' , "&amp;", '<' , "&lt;",'>' , "&gt;")
-        );
         int start = 0;
         for (int i = 0; i < str.length(); i++) {
             if (unescapedCharacters.contains(str.charAt(i))) {
