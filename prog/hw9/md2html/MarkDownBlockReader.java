@@ -88,26 +88,19 @@ public class MarkDownBlockReader {
 
         for (int i = 0; i < line.length(); i++) {
             Pattern currentPattern;
-            // чек экранирования
             if (line.charAt(i) == '\\') {
                 line = line.substring(0, i) + line.substring(i + 1);
                 continue;
             }
-            // находит токен прохода, если нет, возвращает null
-            // TODO: заменить на проход по токенам
-            if (i + 1 < line.length()) {
-                currentPattern = whatToken(line.charAt(i), line.charAt(i + 1));
-            } else {
-                // TODO: replace '\u0000'
-                currentPattern = whatToken(line.charAt(i), '\u0000');
-            }
+
+            currentPattern = takePattern(line, i);
 
             if (currentPattern == null) {
                 continue;
             }
 
-            i += currentPattern.getLen();
-            tokenQueue.addRowText(line.substring(pointer, i - currentPattern.getLen()));
+            i += currentPattern.getAdditionalLen();
+            tokenQueue.addRowText(line.substring(pointer, i - currentPattern.getAdditionalLen()));
             pointer = i + 1;
             boolean success = tokenQueue.add(currentPattern);
             if (success) {
@@ -120,26 +113,21 @@ public class MarkDownBlockReader {
         return tokenQueue.getFistTokenList();
     }
 
-    private Pattern whatToken(char c, char nextC) {
-        if (c == '*') {
-            if (nextC == '*') {
-                return Pattern.STRONG_STAR;
-            } else {
-                return Pattern.EMPHASIS_STAR;
+    private Pattern takePattern(String line, int index) {
+        Pattern outPattern = null;
+        for (Pattern p: Pattern.values()) {
+            String toCheck = line.substring(index, Math.min(line.length(), index + p.getLen()));
+            if (toCheck.equals(p.getSeparator())) {
+                if (outPattern == null) {
+                    outPattern = p;
+                    continue;
+                }
+                if (outPattern.getLen() < p.getLen()) {
+                    outPattern = p;
+                }
             }
-        } else if (c == '_') {
-            if (nextC == '_') {
-                return Pattern.STRONG_UNDERSCORE;
-            } else {
-                return Pattern.EMPHASIS_UNDERSCORE;
-            }
-        } else if (c == '`') {
-            return Pattern.CODE;
-        } else if (c == '-' && nextC == '-') {
-            return Pattern.STRIKEOUT;
-        } else {
-            return null;
         }
+        return outPattern;
     }
 
     private StringBuilder toEscapedString(StringBuilder str) {

@@ -6,47 +6,48 @@ import java.util.List;
 
 public enum Pattern {
     //TODO: переделать в классы
-    EMPHASIS_STAR(0, "*") {
+    EMPHASIS_STAR("*") {
         public TextElement create(List<TextElement> textElements) {
             return new Emphasis(textElements);
         }
     },
-    EMPHASIS_UNDERSCORE(0, "_") {
+    EMPHASIS_UNDERSCORE("_") {
         public TextElement create(List<TextElement> textElements) {
             return new Emphasis(textElements);
         }
     },
-    STRONG_STAR(1, "**") {
+    STRONG_STAR("**") {
         public TextElement create(List<TextElement> textElements) {
             return new Strong(textElements);
         }
     },
-    STRONG_UNDERSCORE(1, "__") {
+    STRONG_UNDERSCORE("__") {
         public TextElement create(List<TextElement> textElements) {
             return new Strong(textElements);
         }
     },
-    STRIKEOUT(1, "--") {
+    STRIKEOUT("--") {
         public TextElement create(List<TextElement> textElements) {
             return new Strikeout(textElements);
         }
     },
-    CODE(0, "`") {
+    CODE("`") {
         public TextElement create(List<TextElement> textElements) {
             return new Code(textElements);
         }
     };
 
-    private final int len;
     private final String separator;
 
-    Pattern(int len, String separator) {
-        this.len = len;
+    Pattern(String separator) {
         this.separator = separator;
     }
 
+    public int getAdditionalLen() {
+        return getSeparator().length() - 1;
+    }
     public int getLen() {
-        return len;
+        return getSeparator().length();
     }
     public String getSeparator() {
         return separator;
