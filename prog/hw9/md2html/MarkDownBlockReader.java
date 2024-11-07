@@ -19,7 +19,12 @@ public class MarkDownBlockReader {
             new StrikeoutPattern(),
             new EmphasisStarPattern(),
             new EmphasisUnderscorePattern(),
-            new CodePattern()
+            new CodePattern(),
+            new MarkPattern()
+    );
+    private final Set<Character> unescapedCharacters = new HashSet<>(Set.of('&', '<', '>'));
+    private final Map<Character, String> replaceCharacters = new HashMap<>(
+            Map.of('&' , "&amp;", '<' , "&lt;",'>' , "&gt;")
     );
 
     public MarkDownBlockReader(InputStream input) throws UnsupportedEncodingException {
@@ -90,22 +95,27 @@ public class MarkDownBlockReader {
     private List<TextElement> transformToTextElements(String line) {
         TokenStack tokenStack = new TokenStack();
         int pointer = 0;
+        StringBuilder lineAppender = new StringBuilder();
 
         for (int i = 0; i < line.length(); i++) {
             AbstractPattern currentPattern;
             if (line.charAt(i) == '\\') {
-                line = line.substring(0, i) + line.substring(i + 1);
+                lineAppender.append(line, pointer, i);
+                tokenStack.addRowText(lineAppender.toString());
+                i++;
+                pointer = i;
                 continue;
             }
 
             currentPattern = takePattern(line, i);
-
             if (currentPattern == null) {
                 continue;
             }
 
+            lineAppender.append(line, pointer, i);
             i += currentPattern.getAdditionalLen();
-            tokenStack.addRowText(line.substring(pointer, i - currentPattern.getAdditionalLen()));
+            tokenStack.addRowText(lineAppender.toString());
+            lineAppender.setLength(0);
             pointer = i + 1;
             boolean patternNotExists = tokenStack.add(currentPattern);
             if (patternNotExists) {
@@ -130,10 +140,6 @@ public class MarkDownBlockReader {
 
     private String toEscapedString(StringBuilder str) {
         StringBuilder escapedStr = new StringBuilder();
-        Set<Character> unescapedCharacters = new HashSet<>(Set.of('&', '<', '>'));
-        Map<Character, String> replaceCharacters = new HashMap<>(
-            Map.of('&' , "&amp;", '<' , "&lt;",'>' , "&gt;")
-        );
         int start = 0;
         for (int i = 0; i < str.length(); i++) {
             if (unescapedCharacters.contains(str.charAt(i))) {
