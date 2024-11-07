@@ -30,9 +30,6 @@ public class MarkDownBlockReader {
 
         StringBuilder block = readBlock();
 
-//        if (block.isEmpty()) {
-//            return null;
-//        }
         // обработка содержательных строк
         if (block.toString().startsWith("#")) {
             while (block.charAt(headerLevel) == '#') {
@@ -57,25 +54,22 @@ public class MarkDownBlockReader {
     }
 
     private StringBuilder readBlock() throws IOException {
-        // линия ридера
-        String line = reader.readLine();
-        // заполняется блоком до разделителей (пустых строк)
         boolean previosLine = false;
         StringBuilder textBlock = new StringBuilder();
+
+        String line = reader.readLine();
+
         if (line != null && line.isEmpty()) {
             while (line.isEmpty()) {
                 line = reader.readLine();
             }
         }
+
         while (line != null && !line.isEmpty()) {
             if (previosLine) {
                 textBlock.append("\n");
             }
-            // заменяет спец символы на экранированные
             line = toEscapedString(line);
-
-            // детектит header
-
             previosLine = true;
             textBlock.append(line);
             line = reader.readLine();
@@ -97,10 +91,29 @@ public class MarkDownBlockReader {
     }
 
     public String toEscapedString(String str) {
+        StringBuilder escapedStr = new StringBuilder();
+        int start = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '&') {
+                escapedStr.append(str, start, i);
+                escapedStr.append("&amp;");
+                start = i + 1;
+            } else if (str.charAt(i) == '<') {
+                escapedStr.append(str, start, i);
+                escapedStr.append("&lt;");
+                start = i + 1;
+            } else if (str.charAt(i) == '>') {
+                escapedStr.append(str, start, i);
+                escapedStr.append("&gt;");
+                start = i + 1;
+            }
+        }
+        escapedStr.append(str, start, str.length());
+        return escapedStr.toString();
         // TODO: стрингбилдером сабстрингу + экранированный чар
-        return str.replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;");
+//        return str.replace("&", "&amp;")
+//                .replace("<", "&lt;")
+//                .replace(">", "&gt;");
     }
 
     private List<TextElement> lineChecker(String line) {
