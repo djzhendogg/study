@@ -1,21 +1,29 @@
 package md2html;
 
-import md2html.markup.*;
+import md2html.markup.AbstractTextDecorator;
+import md2html.markup.Header;
+import md2html.markup.Paragraph;
+import md2html.markup.TextElement;
+import md2html.patterns.*;
 
 import java.io.*;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class MarkDownBlockReader {
-    private BufferedReader reader;
+    private final BufferedReader reader;
     private boolean closed = false;
+    private final List<AbstractPattern> allPatterns = List.of(
+            new StrongStarPattern(),
+            new StrongUnderscorePattern(),
+            new StrikeoutPattern(),
+            new EmphasisStarPattern(),
+            new EmphasisUnderscorePattern(),
+            new CodePattern()
+    );
 
     public MarkDownBlockReader(InputStream input) throws UnsupportedEncodingException {
-        this.reader = new BufferedReader(
-                new InputStreamReader(
-                        input,
-                        "UTF8"
-                )
-        );
+        this.reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
     }
 
     public AbstractTextDecorator nextBlock() throws IOException {
@@ -87,7 +95,7 @@ public class MarkDownBlockReader {
         int pointer = 0;
 
         for (int i = 0; i < line.length(); i++) {
-            Pattern currentPattern;
+            AbstractPattern currentPattern;
             if (line.charAt(i) == '\\') {
                 line = line.substring(0, i) + line.substring(i + 1);
                 continue;
@@ -113,21 +121,14 @@ public class MarkDownBlockReader {
         return tokenQueue.getFistTokenList();
     }
 
-    private Pattern takePattern(String line, int index) {
-        Pattern outPattern = null;
-        for (Pattern p: Pattern.values()) {
+    private AbstractPattern takePattern(String line, int index) {
+        for (AbstractPattern p : allPatterns) {
             String toCheck = line.substring(index, Math.min(line.length(), index + p.getLen()));
             if (toCheck.equals(p.getSeparator())) {
-                if (outPattern == null) {
-                    outPattern = p;
-                    continue;
-                }
-                if (outPattern.getLen() < p.getLen()) {
-                    outPattern = p;
-                }
+                return p;
             }
         }
-        return outPattern;
+        return null;
     }
 
     private StringBuilder toEscapedString(StringBuilder str) {

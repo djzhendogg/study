@@ -2,6 +2,7 @@ package md2html;
 
 import md2html.markup.Text;
 import md2html.markup.TextElement;
+import md2html.patterns.AbstractPattern;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TokenQueue {
-    Set<Pattern> patterns;
+    Set<AbstractPattern> patterns;
     List<TextBlock> textQueue;
 
     public TokenQueue() {
@@ -18,7 +19,7 @@ public class TokenQueue {
         textQueue.add(new TextBlock(null));
     }
 
-    public boolean add(Pattern p) {
+    public boolean add(AbstractPattern p) {
         boolean success = patterns.add(p);
         if (success) {
             textQueue.add(new TextBlock(p));
@@ -26,7 +27,7 @@ public class TokenQueue {
         return success;
     }
 
-    public void pushDown(Pattern desiredPattern) {
+    public void pushDown(AbstractPattern desiredPattern) {
         int startTokenId = findToken(desiredPattern);
 
         removeDummyNesting(desiredPattern);
@@ -42,7 +43,7 @@ public class TokenQueue {
         textQueue.getLast().addElement(new Text(str));
     }
 
-    public void removeDummyNesting(Pattern desiredPattern) {
+    public void removeDummyNesting(AbstractPattern desiredPattern) {
         int index = textQueue.size() - 1;
 
         while (textQueue.get(index).getPattern() != desiredPattern) {
@@ -59,7 +60,7 @@ public class TokenQueue {
         return textQueue.getFirst().getTextElementList();
     }
 
-    private int findToken(Pattern desiredPattern) {
+    private int findToken(AbstractPattern desiredPattern) {
         for (int i = textQueue.size() - 1; i >= 0; i--) {
             if (textQueue.get(i).getPattern() == desiredPattern) {
                 return i;

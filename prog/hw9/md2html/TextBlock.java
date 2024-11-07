@@ -1,19 +1,20 @@
 package md2html;
 
 import md2html.markup.TextElement;
+import md2html.patterns.AbstractPattern;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TextBlock {
     private final List<TextElement> textElements = new ArrayList<>();
-    private final Pattern pattern;
+    private final AbstractPattern pattern;
 
-    public TextBlock(Pattern pattern) {
+    public TextBlock(AbstractPattern pattern) {
         this.pattern = pattern;
     }
 
-    public Pattern getPattern() {
+    public AbstractPattern getPattern() {
         return pattern;
     }
 
