@@ -47,6 +47,7 @@ public class TokenQueue {
 
         while (textQueue.get(index).getPattern() != desiredPattern) {
             TextBlock toMove = textQueue.get(index);
+            textQueue.get(index - 1).addElement(new Text(toMove.getPattern().getSeparator()));
             textQueue.get(index - 1).addElements(toMove.getTextElementList());
             patterns.remove(toMove.getPattern());
             textQueue.remove(index);
