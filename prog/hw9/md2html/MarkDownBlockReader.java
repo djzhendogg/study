@@ -18,75 +18,73 @@ public class MarkDownBlockReader {
         );
     }
 
-    public StringBuilder nextBlock() throws IOException {
+    public AbstractTextDecorator nextBlock() throws IOException {
         // хранит готовый литс тексовых элементов
         List<TextElement> rowParagraph;
-        // линия ридера
-        String line = reader.readLine();
-        // для добавления \n в конце
-        boolean previosLine = false;
         // выделяет блок как хедер, тк по разному парсятся
         boolean isHeader = false;
         // уровень хедера, также используется для скипа элементов
         int headerLevel = 0;
-        // заполняется стрингой в HTML
-        StringBuilder htmlString = new StringBuilder();
-        // заполняется блоком до разделителей (пустых строк)
-        StringBuilder bigLine = new StringBuilder();
         // хранит итоговый класс разметки заполненный
         AbstractTextDecorator finalParagraph;
 
-        // читает до содержательнойц строки
+        StringBuilder block = readBlock();
+
+//        if (block.isEmpty()) {
+//            return null;
+//        }
+        // обработка содержательных строк
+        if (block.toString().startsWith("#")) {
+            while (block.charAt(headerLevel) == '#') {
+                headerLevel++;
+            }
+            if (Character.isWhitespace(block.charAt(headerLevel))) {
+                isHeader = true;
+            }
+        }
+
+        if (isHeader) {
+            // забирает сабстрингу
+            rowParagraph = lineChecker(block.substring(headerLevel + 1));
+            finalParagraph = new Header(rowParagraph, headerLevel);
+        } else {
+            // забирает целую
+            rowParagraph = lineChecker(block.toString());
+            finalParagraph = new Paragraph(rowParagraph);
+        }
+
+        return finalParagraph;
+    }
+
+    private StringBuilder readBlock() throws IOException {
+        // линия ридера
+        String line = reader.readLine();
+        // заполняется блоком до разделителей (пустых строк)
+        boolean previosLine = false;
+        StringBuilder textBlock = new StringBuilder();
         if (line != null && line.isEmpty()) {
             while (line.isEmpty()) {
                 line = reader.readLine();
             }
         }
-
-        // обработка содержательных строк
-        // TODO: выделить метод парсинга блока
         while (line != null && !line.isEmpty()) {
             if (previosLine) {
-                bigLine.append("\n");
+                textBlock.append("\n");
             }
             // заменяет спец символы на экранированные
             line = toEscapedString(line);
 
             // детектит header
-            // TODO: в отдельный метод после полного парсинга
-            if (!previosLine && line.startsWith("#")) {
-                while (line.charAt(headerLevel) == '#') {
-                    headerLevel++;
-                }
-                if (Character.isWhitespace(line.charAt(headerLevel))) {
-                    isHeader = true;
-                }
-            }
+
             previosLine = true;
-            bigLine.append(line);
+            textBlock.append(line);
             line = reader.readLine();
-        }
-        if (isHeader) {
-            // забирает сабстрингу
-            rowParagraph = lineChecker(bigLine.substring(headerLevel + 1));
-            finalParagraph = new Header(rowParagraph, headerLevel);
-        } else {
-            // забирает целую
-            rowParagraph = lineChecker(bigLine.toString());
-            finalParagraph = new Paragraph(rowParagraph);
         }
 
         if (line == null) {
             close();
         }
-
-        // TODO: возвращать finalParagraph
-        finalParagraph.toHtml(htmlString);
-        if (htmlString.isEmpty()) {
-            return null;
-        } else {
-            return htmlString;
-        }
+        return textBlock;
     }
 
     public boolean hasNext() throws IOException {

@@ -1,5 +1,7 @@
 package md2html;
 
+import md2html.markup.AbstractTextDecorator;
+
 import java.io.*;
 import java.util.Arrays;
 
@@ -17,8 +19,10 @@ public class Md2Html {
                         "UTF8"));
                 try {
                     while (reader.hasNext()) {
-                        StringBuilder a = reader.nextBlock();
-                        writer.write(a.toString());
+                        StringBuilder htmlString = new StringBuilder();
+                        AbstractTextDecorator paragraph = reader.nextBlock();
+                        paragraph.toHtml(htmlString);
+                        writer.write(htmlString.toString());
                         writer.newLine();
                     }
                 } finally {
