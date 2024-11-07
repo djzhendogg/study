@@ -3,6 +3,7 @@ package md2html;
 import md2html.markup.AbstractTextDecorator;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class Md2Html {
@@ -11,12 +12,14 @@ public class Md2Html {
             throw new IllegalArgumentException("Usage: java WordStatInput <input_file_name> <output_file_name>");
         }
         try {
-            MarkDownBlockReader reader = new MarkDownBlockReader(
-                    new FileInputStream(args[0]));
+            MarkDownBlockReader reader = new MarkDownBlockReader(new FileInputStream(args[0]));
             try {
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(
                         new FileOutputStream(args[1]),
-                        "UTF8"));
+                        StandardCharsets.UTF_8
+                    )
+                );
                 try {
                     while (reader.hasNext()) {
                         StringBuilder htmlString = new StringBuilder();

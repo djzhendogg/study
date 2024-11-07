@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Set;
 
 public class TokenQueue {
-    Set<AbstractPattern> patterns;
-    List<TextBlock> textQueue;
+    private final Set<AbstractPattern> patterns;
+    private final List<TextBlock> textQueue;
 
-    public TokenQueue() {
+    protected TokenQueue() {
         patterns = new HashSet<>();
         textQueue = new ArrayList<>();
         textQueue.add(new TextBlock(null));
