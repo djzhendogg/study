@@ -1,31 +1,71 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.StringTokenizer;
 
-public class BstBasic {
+
+public class BstImpictMax {
     public static void main(String[] args) {
-        int[] a = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        Vertex tree = null;
-        for (int i = 0; i < a.length; i++) {
-            tree = insert(tree, i, a[i], true);
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    System.in,
+                    "UTF8"));
+            try {
+                int n = Integer.parseInt(reader.readLine());
+                String line = reader.readLine();
+                Vertex tree = null;
+                StringTokenizer tokenizer = new StringTokenizer(line, " ");
+                for (long i = 0; i < n; i++) {
+                    tree = insert(tree, i, Long.parseLong(tokenizer.nextToken()), true);
+                }
+                int m = Integer.parseInt(reader.readLine());
+                for (int i = 0; i < m; i++) {
+                    line = reader.readLine();
+                    tokenizer = new StringTokenizer(line, " ");
+                    String operation = tokenizer.nextToken();
+                    if (Objects.equals(operation, "m")) {
+                        long l = Long.parseLong(tokenizer.nextToken());
+                        long r = Long.parseLong(tokenizer.nextToken());
+                        System.out.println(maxBetween(tree, l, r));
+                    } else {
+                        long l = Long.parseLong(tokenizer.nextToken());
+                        long r = Long.parseLong(tokenizer.nextToken());
+                        long val = Long.parseLong(tokenizer.nextToken());
+                        add(tree, l, r, val);
+                    }
+                }
+            } finally {
+                reader.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
         }
-
-        print(tree);
-        System.out.print('\n');
-        System.out.println(sumBetween(tree, 3, 7));
-        insert(tree, 4 - 1, 5, false);
-        insert(tree, 7 - 1, 200, false);
-        System.out.println(sumBetween(tree, 3, 7));
-        print(tree);
     }
+
+    public static Vertex recalculateAll(Vertex root) {
+        if (root == null) {
+            return root;
+        }
+        recalculateAll(root.left);
+        recalculate(root);
+        recalculateAll(root.right);
+        return recalculate(root);
+    }
+
     public static void print(Vertex root) {
         if (root == null) {
             return;
         }
         push(root.left);
+        recalculate(root.left);
         print(root.left);
         System.out.print(root.data);
         System.out.print(" ");
         push(root.right);
+        recalculate(root.right);
         print(root.right);
     }
     public static Vertex merge(Vertex root1, Vertex root2) {
@@ -80,11 +120,6 @@ public class BstBasic {
         return merge(ab.getFirst(), merge(c, b));
     }
 
-    public static Vertex remove(Vertex root, long x) {
-        List<Vertex> ab = split(root, x, 0);
-        List<Vertex> cd = split(ab.get(1), 1, 0);
-        return merge(ab.getFirst(), cd.getLast());
-    }
     public static long get(Vertex root, long x) {
         List<Vertex> ab = split(root, x, 0);
         List<Vertex> cd = split(ab.get(1), 1, 0);
@@ -97,14 +132,6 @@ public class BstBasic {
         List<Vertex> cd = split(ab.get(1), right - left + 1, 0);
         update(cd.getFirst(), value);
         return merge(ab.getFirst(), merge(cd.getFirst(), cd.getLast()));
-    }
-
-    public static boolean find(Vertex root, long x) {
-        List<Vertex> ab = split(root, x, 0);
-        List<Vertex> cd = split(ab.get(1), 1, 0);
-        boolean res = cd.getFirst() != null;
-        merge(ab.getFirst(), merge(cd.getFirst(), cd.getLast()));
-        return res;
     }
 
     public static long sizeOf(Vertex root) {
@@ -120,23 +147,15 @@ public class BstBasic {
         push(root);
         if (root != null) {
             root.size = sizeOf(root.left) + sizeOf(root.right) + 1;
-            root.sum = sumOf(root.left) + sumOf(root.right) + dataOf(root);
+            root.max = Math.max(dataOf(root), Math.max(maxOf(root.left), maxOf(root.right)));
         }
         return root;
     }
-
-    public static long sumOf(Vertex root) {
-        push(root);
-        if (root != null) {
-            return root.sum;
-        } else {
-            return 0;
-        }
-    }
-    public static long sumBetween(Vertex root, long left, long right) {
+    public static long maxBetween(Vertex root, long left, long right) {
+        recalculateAll(root);
         List<Vertex> ab = split(root, left - 1, 0);
         List<Vertex> cd = split(ab.get(1), right - left + 1, 0);
-        long res = sumOf(cd.getFirst());
+        long res = maxOf(cd.getFirst());
         merge(ab.getFirst(), merge(cd.getFirst(), cd.getLast()));
         return res;
     }
@@ -148,15 +167,25 @@ public class BstBasic {
             return 0;
         }
     }
+    public static long maxOf(Vertex root) {
+        push(root);
+        if (root != null) {
+            return Math.max(root.data, root.max);
+        } else {
+            return 0;
+        }
+    }
+
     public static void update(Vertex root, long flag) {
         if (root != null) {
             root.flag += flag;
         }
     }
+
     public static void push(Vertex root) {
         if (root != null && root.flag != 0) {
             root.data += root.flag;
-            root.sum += root.flag * root.size;
+            root.max = root.data;
             update(root.left, root.flag);
             update(root.right, root.flag);
             root.flag = 0;
@@ -168,16 +197,16 @@ public class BstBasic {
         protected Vertex left;
         protected Vertex right;
         protected long size = 1;
-        protected long sum;
         protected long flag;
+        protected long max;
 
 
         public Vertex(long data, int priority, Vertex left, Vertex right) {
             this.data = data;
-            this.sum = data;
             this.priority = priority;
             this.left = left;
             this.right = right;
+            this.max = data;
         }
 
         public int priority() {
