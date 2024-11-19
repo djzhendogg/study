@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
-public class BstSum {
+public class GoToStart {
     public static void main(String[] args) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -14,40 +14,42 @@ public class BstSum {
                     "UTF8"));
             try {
                 Vertex tree = null;
-                int n = Integer.parseInt(reader.readLine());
-                boolean prevPlus = true;
-                long res = 0;
-                for (int i = 0; i < n; i++) {
-                    String line = reader.readLine();
-                    StringTokenizer tokenizer = new StringTokenizer(line, " ");
-                    String operation = tokenizer.nextToken();
-                    if (Objects.equals(operation, "+")) {
-                        if (prevPlus) {
-                            tree = insert(tree, Long.parseLong(tokenizer.nextToken()));
-                        } else {
-                            tree = insert(
-                                    tree,
-                                    ((res + Long.parseLong(tokenizer.nextToken())) % 1000000000));
-                        }
-                        prevPlus = true;
-                    } else {
-                        SumVertex ans = sumBetween(
-                                tree,
-                                Long.parseLong(tokenizer.nextToken()),
-                                Long.parseLong(tokenizer.nextToken())
-                                );
-                        res = ans.ans;
-                        System.out.println(res);
-                        tree = ans.root;
-                        prevPlus = false;
-                    }
+                String line = reader.readLine();
+                StringTokenizer tokenizer = new StringTokenizer(line, " ");
+                int n = Integer.parseInt(tokenizer.nextToken());
+                for (long i = 1; i <= n; i++) {
+                    tree = insert(tree, i);
                 }
+                int m = Integer.parseInt(tokenizer.nextToken());
+                for (int i = 0; i < m; i++) {
+                    line = reader.readLine();
+                    tokenizer = new StringTokenizer(line, " ");
+                    long l = Long.parseLong(tokenizer.nextToken()) - 1;
+                    long r = Long.parseLong(tokenizer.nextToken());
+                    tree = replaceToStart(tree, l, r);
+                }
+                print(tree);
             } finally {
                 reader.close();
             }
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
+    }
+
+    public static void print(Vertex root) {
+        if (root == null) {
+            return;
+        }
+        print(root.left);
+        System.out.print(root.data);
+        System.out.print(" ");
+        print(root.right);
+    }
+    public static Vertex replaceToStart(Vertex root, long left, long right) {
+        List<Vertex> ab = split(root, left);
+        List<Vertex> cd = split(ab.get(1), right - left);
+        return merge(cd.getFirst(), merge(ab.getFirst(), cd.getLast()));
     }
 
     public static Vertex merge(Vertex root1, Vertex root2) {
@@ -73,8 +75,8 @@ public class BstSum {
             return arr;
         }
         List<Vertex> vertexList;
-        if (root.data < x) {
-            vertexList = split(root.right, x);
+        if (sizeOf(root.left) < x) {
+            vertexList = split(root.right, x - sizeOf(root.left) - 1);
             root.right = vertexList.get(0);
             arr.add(recalculate(root));
             arr.add(vertexList.get(1));
@@ -95,47 +97,38 @@ public class BstSum {
         return merge(ab.getFirst(), merge(c, cd.getLast()));
     }
 
+    public static Vertex remove(Vertex root, long x) {
+        List<Vertex> ab = split(root, x);
+        List<Vertex> cd = split(ab.get(1), x + 1);
+        return merge(ab.getFirst(), cd.getLast());
+    }
+
     public static Vertex recalculate(Vertex root) {
         if (root != null) {
-            root.sum = sumOf(root.left) + sumOf(root.right) + dataOf(root);
+            root.size = sizeOf(root.left) + sizeOf(root.right) + 1;
         }
         return root;
     }
 
-    public static long sumOf(Vertex root) {
+    public static long sizeOf(Vertex root) {
         if (root != null) {
-            return root.sum;
+            return root.size;
         } else {
             return 0;
         }
     }
 
-    public static SumVertex sumBetween(Vertex root, long left, long right) {
-        List<Vertex> ab = split(root, left);
-        List<Vertex> cd = split(ab.get(1), right + 1);
-        long res = sumOf(cd.getFirst());
-        root = merge(ab.getFirst(), merge(cd.getFirst(), cd.getLast()));
-        return new SumVertex(res, root);
-    }
-    public static long dataOf(Vertex root) {
-        if (root != null) {
-            return root.data;
-        } else {
-            return 0;
-        }
-    }
     public static class Vertex {
         protected long data;
         private final int priority;
         protected Vertex left;
         protected Vertex right;
-        protected long sum;
+        protected long size = 1;
         protected long flag;
 
 
         public Vertex(long data, int priority, Vertex left, Vertex right) {
             this.data = data;
-            this.sum = data;
             this.priority = priority;
             this.left = left;
             this.right = right;
@@ -146,5 +139,4 @@ public class BstSum {
         }
 
     }
-    public record SumVertex(long ans, Vertex root) {}
 }
