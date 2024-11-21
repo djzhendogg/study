@@ -1,4 +1,4 @@
-package mnk;
+package game;
 
 import java.util.Map;
 
@@ -6,7 +6,8 @@ public class MnkPosition implements Position{
     private static final Map<Cell, Character> SYMBOLS = Map.of(
         Cell.X, 'X',
         Cell.O, 'O',
-        Cell.E, '.'
+        Cell.E, '.',
+        Cell.B, ' '
     );
     private final int mCols;
     private final int nRows;

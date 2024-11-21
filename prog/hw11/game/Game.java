@@ -1,11 +1,9 @@
 package game;
 
-/**
- * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
- */
 public class Game {
     private final boolean log;
-    private final Player player1, player2;
+    private final Player player1;
+    private final Player player2;
 
     public Game(final boolean log, final Player player1, final Player player2) {
         this.log = log;
@@ -27,27 +25,26 @@ public class Game {
     }
 
     private int move(final Board board, final Player player, final int no) {
-        final Move move = player.move(board.getPosition(), board.getCell());
+        final Move move = player.move(board.getPosition());
+        if (move == null) {
+            System.out.println("Player " + no + " lose");
+            return 3 - no;
+        }
         final Result result = board.makeMove(move);
-        log("Player " + no + " move: " + move);
-        log("Position:\n" + board);
+        if (log) {
+            System.out.println("Player " + no + " move: " + move);
+        }
         if (result == Result.WIN) {
-            log("Player " + no + " won");
+            System.out.println("Player " + no + " won");
             return no;
         } else if (result == Result.LOSE) {
-            log("Player " + no + " lose");
+            System.out.println("Player " + no + " lose");
             return 3 - no;
         } else if (result == Result.DRAW) {
-            log("Draw");
+            System.out.println("Draw");
             return 0;
         } else {
             return -1;
-        }
-    }
-
-    private void log(final String message) {
-        if (log) {
-            System.out.println(message);
         }
     }
 }

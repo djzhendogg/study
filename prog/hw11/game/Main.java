@@ -1,15 +1,110 @@
 package game;
 
-/**
- * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
- */
+import java.util.InputMismatchException;
+import java.util.Objects;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        final Game game = new Game(true, new RandomPlayer(), new HumanPlayer());
-        int result;
+        Scanner scanner = new Scanner(System.in);
+        BoardOptions boardOption = chooseBoard(scanner);
+        if (boardOption == BoardOptions.CLASSIC) {
+            playClassicGame(scanner);
+        } else {
+            playRhombusGame(scanner);
+        }
+    }
+
+    public static void playRhombusGame(Scanner scanner) {
+        int m = setGameParams(scanner, "m", 1);
+        int side = m * 2 - 1;
+        int k = setGameParams(scanner, "k", side);
+        System.out.printf("GAME START %nField is %d X %d%n+----------------------------+%n", m, m);
+
+        final Game game = new Game(false, new HumanPlayer(), new RandomPlayer(side, side));
+        String ans;
         do {
-            result = game.play(new TicTacToeBoard());
-            System.out.println("Game result: " + result);
-        } while (result != 0);
+            game.play(new MnkRhombusBoard(m, k));
+            System.out.println("Start new game? y/n");
+            while (true) {
+                ans = scanner.next();
+                if (Objects.equals(ans, "y") || Objects.equals(ans, "n")) {
+                    break;
+                } else {
+                    System.out.println("I don't understand. Repeat enter: y/n");
+                }
+            }
+        } while (ans.equals("y"));
+    }
+
+    public static void playClassicGame(Scanner scanner) {
+        int m = setGameParams(scanner, "m", 1);
+        int n = setGameParams(scanner, "n", 1);
+        int k = setGameParams(scanner, "k", Math.max(m, n));
+        System.out.printf("GAME START %nField is %d X %d%n+----------------------------+%n", n, m);
+
+        final Game game = new Game(false, new HumanPlayer(), new RandomPlayer(m, n));
+        String ans;
+        do {
+            game.play(new MnkBoard(m, n, k));
+            System.out.println("Start new game? y/n");
+            while (true) {
+                ans = scanner.next();
+                if (Objects.equals(ans, "y") || Objects.equals(ans, "n")) {
+                    break;
+                } else {
+                    System.out.println("I don't understand. Repeat enter: y/n");
+                }
+            }
+        } while (ans.equals("y"));
+    }
+
+    public static int setGameParams(Scanner sc, String param, int option) {
+        System.out.printf("Enter %s value:%n", param);
+        int res;
+        while (true) {
+            try {
+                res = sc.nextInt();
+                if (res <= 1) {
+                    System.out.println("Wrong value. Value must be > 1. Repeat enter:");
+                    sc.nextLine();
+                    continue;
+                }
+                if (Objects.equals(param, "k") && res > option) {
+                    System.out.printf("Wrong value. Value must be <= %d. Repeat enter:%n", option);
+                    sc.nextLine();
+                    continue;
+                }
+                break;
+            } catch (InputMismatchException ex) {
+                System.out.println("Wrong value. Value must be number. Repeat enter:");
+                sc.nextLine();
+            }
+        }
+        return res;
+    }
+
+    public static BoardOptions chooseBoard(Scanner sc) {
+        System.out.println("Choose A Board:\n1. classic.\n2. rhombus.");
+        BoardOptions res;
+        while (true) {
+            try {
+                int val = sc.nextInt();
+                if (val == 1) {
+                    res = BoardOptions.CLASSIC;
+                } else if (val == 2) {
+                    res = BoardOptions.RHOMBUS;
+                } else {
+                    System.out.println("I don't understand. Repeat enter:\n1. classic.\n2. rhombus.");
+                    sc.nextLine();
+                    continue;
+                }
+                break;
+            } catch (InputMismatchException ex) {
+                System.out.println("Wrong value. Value must be integer. Repeat enter:");
+                sc.nextLine();
+            }
+        }
+        return res;
     }
 }

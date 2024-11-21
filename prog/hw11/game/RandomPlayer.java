@@ -2,26 +2,27 @@ package game;
 
 import java.util.Random;
 
-/**
- * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
- */
 public class RandomPlayer implements Player {
     private final Random random;
+    private final int mCols;
+    private final int nRows;
 
-    public RandomPlayer(final Random random) {
+    public RandomPlayer(int m, int n, final Random random) {
+        this.mCols = m;
+        this.nRows = n;
         this.random = random;
     }
 
-    public RandomPlayer() {
-        this(new Random());
+    public RandomPlayer(int m, int n) {
+        this(m, n, new Random());
     }
 
     @Override
-    public Move move(final Position position, final Cell cell) {
+    public Move move(final Position position) {
         while (true) {
-            int r = random.nextInt(3);
-            int c = random.nextInt(3);
-            final Move move = new Move(r, c, cell);
+            int r = random.nextInt(nRows);
+            int c = random.nextInt(mCols);
+            final Move move = new Move(r, c, position.getCell());
             if (position.isValid(move)) {
                 return move;
             }
