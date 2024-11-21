@@ -14,9 +14,7 @@ public class RandomPlayer implements Player {
     }
 
     public RandomPlayer(int m, int n) {
-        this.mCols = m;
-        this.nRows = n;
-        this.random = new Random();
+        this(m, n, new Random());
     }
 
     @Override

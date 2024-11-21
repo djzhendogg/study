@@ -161,15 +161,7 @@ public class MnkBoard implements Board {
             offset++;
         }
 
-        if (inDiag2 >= kCellsToWin) {
-            return true;
-        }
-
-        return false;
+        return inDiag2 >= kCellsToWin;
     }
 
-    @Override
-    public String toString() {
-        return position.toString();
-    }
 }
