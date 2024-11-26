@@ -35,6 +35,7 @@ public class Settings {
         setGameParameters();
         setGameMode();
         setGamePlayers();
+        resetBoard();
     }
 
     public Settings() {
@@ -63,14 +64,6 @@ public class Settings {
 
     public int getK() {
         return k;
-    }
-
-    public void resetBoard() {
-        if (boardMode == BoardMode.CLASSIC) {
-            board = new MnkRectangleBoard(m, n, k);
-        } else {
-            board = new MnkRhombusBoard(m, n, k);
-        }
     }
 
     private void setBoardMode() {
@@ -137,13 +130,19 @@ public class Settings {
             setM();
             setN();
             setK(Math.max(m, n));
-            this.board = new MnkRectangleBoard(m, n, k);
         } else {
             setM();
             m = m * 2 - 1;
             this.n = m;
             setK(m);
-            this.board = new MnkRhombusBoard(m, n, k);
+        }
+    }
+
+    public void resetBoard() {
+        if (boardMode == BoardMode.CLASSIC) {
+            board = new MnkRectangleBoard(m, n, k);
+        } else {
+            board = new MnkRhombusBoard(m, n, k);
         }
     }
 
