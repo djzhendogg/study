@@ -1,5 +1,7 @@
 package game;
 
+import game.utils.Cell;
+
 public final class Move {
     private final int row;
     private final int column;

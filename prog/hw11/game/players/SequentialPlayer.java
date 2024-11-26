@@ -1,4 +1,7 @@
-package game;
+package game.players;
+
+import game.Move;
+import game.position.Position;
 
 public class SequentialPlayer implements Player {
     private final int mCols;

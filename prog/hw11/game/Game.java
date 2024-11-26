@@ -1,5 +1,9 @@
 package game;
 
+import game.board.Board;
+import game.players.Player;
+import game.utils.Result;
+
 public class Game {
     private final boolean log;
     private final Player player1;

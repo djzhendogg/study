@@ -1,4 +1,7 @@
-package game;
+package game.players;
+
+import game.Move;
+import game.position.Position;
 
 import java.io.PrintStream;
 import java.util.InputMismatchException;
