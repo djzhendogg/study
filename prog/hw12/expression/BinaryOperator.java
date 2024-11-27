@@ -9,7 +9,7 @@ public abstract class BinaryOperator implements Expression {
     private final Expression operand2;
 
     public BinaryOperator(String value, int priority, Expression operand1, Expression operand2) {
-        this.value = value;
+        this.value = " " + value + " ";
         this.priority = priority;
         this.operand1 = operand1;
         this.operand2 = operand2;
