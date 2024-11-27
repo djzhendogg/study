@@ -3,8 +3,8 @@ package game.board;
 import game.*;
 import game.position.MnkPosition;
 import game.position.Position;
-import game.utils.Cell;
-import game.utils.Result;
+import game.position.Cell;
+import game.Result;
 
 public abstract class MnkAbstractBoard implements Board {
     private final int mCols;
@@ -78,15 +78,11 @@ public abstract class MnkAbstractBoard implements Board {
         return position.toString();
     }
 
-    protected int calculateEmptyCells(int mCols, int nRows) {
-        return mCols * nRows;
-    }
+    abstract protected int calculateEmptyCells(int mCols, int nRows);
 
-    protected Cell[][] createCellsTable(int mCols, int nRows) {
-        return new Cell[nRows][mCols];
-    }
+    abstract protected Cell[][] createCellsTable(int mCols, int nRows);
 
-    protected boolean checkHorizontalWin(Move move) {
+    private boolean checkHorizontalWin(Move move) {
         int row = move.getRow();
         int col = move.getColumn();
         int inRow = 1;
@@ -106,7 +102,7 @@ public abstract class MnkAbstractBoard implements Board {
         return inRow >= kCellsToWin;
     }
 
-    protected boolean checkVerticalWin(Move move) {
+    private boolean checkVerticalWin(Move move) {
         int row = move.getRow();
         int col = move.getColumn();
         int inColumn = 1;
@@ -126,7 +122,7 @@ public abstract class MnkAbstractBoard implements Board {
         return inColumn >= kCellsToWin;
     }
 
-    protected boolean checkDiagonalWin(Move move) {
+    private boolean checkDiagonalWin(Move move) {
         int row = move.getRow();
         int col = move.getColumn();
         int inDiag1 = 1;

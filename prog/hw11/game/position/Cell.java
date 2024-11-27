@@ -1,4 +1,4 @@
-package game.utils;
+package game.position;
 
 public enum Cell {
     X, O, E, B

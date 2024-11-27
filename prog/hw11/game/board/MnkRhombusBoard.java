@@ -1,8 +1,8 @@
 package game.board;
 
-import game.utils.Cell;
+import game.position.Cell;
 
-public class MnkRhombusBoard extends MnkAbstractBoard {
+public final class MnkRhombusBoard extends MnkAbstractBoard {
     public MnkRhombusBoard(int mCols, int nRows, int kCellsToWin) {
         super(mCols, nRows, kCellsToWin);
     }

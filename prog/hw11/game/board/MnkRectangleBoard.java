@@ -1,12 +1,17 @@
 package game.board;
 
-import game.utils.Cell;
+import game.position.Cell;
 
 import java.util.Arrays;
 
-public class MnkRectangleBoard extends MnkAbstractBoard {
+public final class MnkRectangleBoard extends MnkAbstractBoard {
     public MnkRectangleBoard(int mCols, int nRows, int kCellsToWin) {
         super(mCols, nRows, kCellsToWin);
+    }
+
+    @Override
+    protected int calculateEmptyCells(int mCols, int nRows) {
+        return mCols * nRows;
     }
 
     @Override

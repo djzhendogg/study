@@ -1,6 +1,6 @@
 package game;
 
-import game.utils.Cell;
+import game.position.Cell;
 
 public final class Move {
     private final int row;

@@ -2,7 +2,7 @@ package game.board;
 
 import game.Move;
 import game.position.Position;
-import game.utils.Result;
+import game.Result;
 
 public interface Board {
     Position getPosition();

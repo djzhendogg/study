@@ -1,7 +1,6 @@
 package game.position;
 
 import game.Move;
-import game.utils.Cell;
 
 import java.util.Map;
 

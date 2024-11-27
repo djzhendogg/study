@@ -22,10 +22,6 @@ public class HumanPlayer implements Player {
 
     @Override
     public Move move(final Position position) {
-        out.println("Board");
-        out.println(position);
-        out.println(position.getCell() + "'s move");
-        out.println("Enter row and column");
         Move move;
         while (true) {
             try {

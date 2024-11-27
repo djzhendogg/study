@@ -18,7 +18,6 @@ public class Main {
         String ans;
         do {
             game.play(settings.getBoard());
-            settings.resetBoard();
             System.out.println("Start new game? y/n");
             while (true) {
                 ans = scanner.next();
@@ -28,6 +27,7 @@ public class Main {
                     System.out.println("I don't understand. Repeat enter: y/n");
                 }
             }
+            settings.resetBoard();
         } while (ans.equals("y"));
     }
 }

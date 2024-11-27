@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class Settings {
     private final PrintStream out;
     private final Scanner in;
-//    TODO: вообще они final, но хз как сделать
+//    TODO: вообще они final - пообарачивать это все в классы
     private BoardMode boardMode;
     private Board board;
     private PlayerMode playerMode;

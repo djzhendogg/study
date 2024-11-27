@@ -1,4 +1,4 @@
-package game.utils;
+package game;
 
 public enum Result {
     WIN, LOSE, DRAW, UNKNOWN

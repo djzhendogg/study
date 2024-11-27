@@ -2,7 +2,6 @@ package game;
 
 import game.board.Board;
 import game.players.Player;
-import game.utils.Result;
 
 public class Game {
     private final boolean log;
@@ -29,6 +28,10 @@ public class Game {
     }
 
     private int move(final Board board, final Player player, final int no) {
+        System.out.println("Board");
+        System.out.println(board.getPosition());
+        System.out.println(board.getPosition().getCell() + "'s move");
+        System.out.println("Enter row and column");
         final Move move = player.move(board.getPosition());
         if (move == null) {
             System.out.println("Player " + no + " lose");
