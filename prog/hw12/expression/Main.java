@@ -19,20 +19,6 @@ public class Main {
                 ),
                 new Const(1)
         ).evaluate(x);
-
-        String str = new Add(
-                new Subtract(
-                        new Multiply(
-                                new Variable("x"),
-                                new Variable("x")
-                        ),
-                        new Multiply(
-                                new Const(2),
-                                new Variable("x")
-                        )
-                ),
-                new Const(1)
-        ).toMiniString();
-        System.out.println(str);
+        System.out.println(result);
     }
 }
