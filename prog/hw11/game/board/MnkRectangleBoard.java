@@ -1,12 +1,13 @@
 package game.board;
 
 import game.position.Cell;
+import game.settings.MnkParameters;
 
 import java.util.Arrays;
 
 public final class MnkRectangleBoard extends MnkAbstractBoard {
-    public MnkRectangleBoard(int mCols, int nRows, int kCellsToWin) {
-        super(mCols, nRows, kCellsToWin);
+    public MnkRectangleBoard(MnkParameters mnkParameters) {
+        super(mnkParameters);
     }
 
     @Override

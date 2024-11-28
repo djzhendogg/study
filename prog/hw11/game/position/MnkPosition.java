@@ -4,7 +4,7 @@ import game.Move;
 
 import java.util.Map;
 
-public class MnkPosition implements Position{
+public final class MnkPosition implements Position{
     private static final Map<Cell, Character> SYMBOLS = Map.of(
         Cell.X, 'X',
         Cell.O, 'O',
@@ -54,9 +54,7 @@ public class MnkPosition implements Position{
         sb.append("\n");
         sb.append("\s\s+");
         sb.append(" ".repeat(3));
-        for (int i = 1; i <= mCols; i++) {
-            sb.append("-\s\s\s");
-        }
+        sb.append("-\s\s\s".repeat(Math.max(0, mCols)));
         for (int r = 0; r < nRows; r++) {
             sb.append("\n");
             sb.append(r + 1);

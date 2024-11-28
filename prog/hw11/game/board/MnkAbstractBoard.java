@@ -5,33 +5,31 @@ import game.position.MnkPosition;
 import game.position.Position;
 import game.position.Cell;
 import game.Result;
+import game.settings.MnkParameters;
 
 public abstract class MnkAbstractBoard implements Board {
     private final int mCols;
     private final int nRows;
     private final int kCellsToWin;
-
-    private final boolean checkDiagonal;
-    private final boolean checkHorizontal;
-    private final boolean checkVertical;
-
+    private final boolean shouldCheckDiagonal;
+    private final boolean shouldCheckHorizontal;
+    private final boolean shouldCheckVertical;
     private final MnkPosition position;
     private final Cell[][] cells;
+    private int emptyCells;
+    private Cell turnCell;
 
-    private int empty;
-    private Cell turn;
-
-    public MnkAbstractBoard(int mCols, int nRows, int kCellsToWin) {
-        this.turn = Cell.X;
-        this.mCols = mCols;
-        this.nRows = nRows;
-        this.kCellsToWin = kCellsToWin;
-        this.checkDiagonal = kCellsToWin <= Math.min(mCols, nRows);
-        this.checkHorizontal = kCellsToWin <= mCols;
-        this.checkVertical = kCellsToWin <= nRows;
+    public MnkAbstractBoard(MnkParameters mnkParameters) {
+        this.turnCell = Cell.X;
+        this.mCols = mnkParameters.getM();
+        this.nRows = mnkParameters.getN();
+        this.kCellsToWin = mnkParameters.getK();
+        this.shouldCheckDiagonal = kCellsToWin <= Math.min(mCols, nRows);
+        this.shouldCheckHorizontal = kCellsToWin <= mCols;
+        this.shouldCheckVertical = kCellsToWin <= nRows;
         this.cells = createCellsTable(mCols, nRows);
-        this.position = new MnkPosition(mCols, nRows, turn, cells);
-        this.empty = calculateEmptyCells(mCols, nRows);
+        this.position = new MnkPosition(mCols, nRows, turnCell, cells);
+        this.emptyCells = calculateEmptyCells(mCols, nRows);
     }
 
     @Override
@@ -46,30 +44,24 @@ public abstract class MnkAbstractBoard implements Board {
         }
 
         cells[move.getRow()][move.getColumn()] = move.getValue();
-        empty--;
+        emptyCells--;
 
-        if (checkHorizontal) {
-            if (checkHorizontalWin(move)) {
-                return Result.WIN;
-            }
+        if (shouldCheckHorizontal && checkHorizontalWin(move)) {
+            return Result.WIN;
         }
-        if (checkVertical) {
-            if (checkVerticalWin(move)) {
-                return Result.WIN;
-            }
+        if (shouldCheckVertical && checkVerticalWin(move)) {
+            return Result.WIN;
         }
-        if (checkDiagonal) {
-            if (checkDiagonalWin(move)) {
-                return Result.WIN;
-            }
+        if (shouldCheckDiagonal && checkDiagonalWin(move)) {
+            return Result.WIN;
         }
 
-        if (empty == 0) {
+        if (emptyCells == 0) {
             return Result.DRAW;
         }
 
-        turn = turn == Cell.X ? Cell.O : Cell.X;
-        position.setCell(turn);
+        turnCell = turnCell == Cell.X ? Cell.O : Cell.X;
+        position.setCell(turnCell);
         return Result.UNKNOWN;
     }
 
@@ -83,95 +75,49 @@ public abstract class MnkAbstractBoard implements Board {
     abstract protected Cell[][] createCellsTable(int mCols, int nRows);
 
     private boolean checkHorizontalWin(Move move) {
-        int row = move.getRow();
-        int col = move.getColumn();
         int inRow = 1;
-        int offset = 1;
-
-        while (0 <= col - offset && cells[row][col - offset] == turn) {
-            inRow++;
-            offset++;
-        }
-
-        offset = 1;
-        while (mCols > col + offset && cells[row][col + offset] == turn) {
-            inRow++;
-            offset++;
-        }
-
+        inRow += countTurnCells(0, -1, move);
+        inRow += countTurnCells(0, 1, move);
         return inRow >= kCellsToWin;
     }
 
     private boolean checkVerticalWin(Move move) {
-        int row = move.getRow();
-        int col = move.getColumn();
         int inColumn = 1;
-        int offset = 1;
-
-        while (0 <= row - offset && cells[row - offset][col] == turn) {
-            inColumn++;
-            offset++;
-        }
-
-        offset = 1;
-        while (nRows > row + offset && cells[row + offset][col] == turn) {
-            inColumn++;
-            offset++;
-        }
-
+        inColumn += countTurnCells(-1, 0, move);
+        inColumn += countTurnCells(1, 0, move);
         return inColumn >= kCellsToWin;
     }
 
     private boolean checkDiagonalWin(Move move) {
-        int row = move.getRow();
-        int col = move.getColumn();
-        int inDiag1 = 1;
-        int inDiag2 = 1;
-        int offset = 1;
+        int inDiagonal = 1;
+        inDiagonal += countTurnCells(-1, -1, move);
+        inDiagonal += countTurnCells(1, 1, move);
 
-        while (
-            0 <= row - offset &&
-            0 <= col - offset &&
-            cells[row - offset][col - offset] == turn
-        ) {
-            inDiag1++;
-            offset++;
-        }
-
-        offset = 1;
-        while (
-            nRows > row + offset &&
-            mCols > col + offset &&
-            cells[row + offset][col + offset] == turn
-        ) {
-            inDiag1++;
-            offset++;
-        }
-
-        if (inDiag1 >= kCellsToWin) {
+        if (inDiagonal >= kCellsToWin) {
             return true;
         }
 
-        offset = 1;
+        inDiagonal = 1;
+        inDiagonal += countTurnCells(-1, 1, move);
+        inDiagonal += countTurnCells(1, -1, move);
+        return inDiagonal >= kCellsToWin;
+    }
+
+    private int countTurnCells(int ratioRows, int ratioCols, Move move) {
+        int offset = 1;
+        int result = 0;
+        int row = move.getRow();
+        int col = move.getColumn();
         while (
-            0 <= row - offset &&
-            mCols > col + offset &&
-            cells[row - offset][col + offset] == turn
+                0 <= row + offset * ratioRows
+                        && row + offset * ratioRows < nRows
+                        && 0 <= col + offset * ratioCols
+                        && col + offset * ratioCols < mCols
+                        && cells[row + offset * ratioRows][col + offset * ratioCols] == turnCell
         ) {
-            inDiag2++;
+            result++;
             offset++;
         }
-
-        offset = 1;
-        while (
-            nRows > row + offset &&
-            0 <= col - offset &&
-            cells[row + offset][col - offset] == turn
-        ) {
-            inDiag2++;
-            offset++;
-        }
-
-        return inDiag2 >= kCellsToWin;
+        return result;
     }
 }

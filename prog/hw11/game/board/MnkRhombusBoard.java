@@ -1,10 +1,11 @@
 package game.board;
 
 import game.position.Cell;
+import game.settings.MnkParameters;
 
 public final class MnkRhombusBoard extends MnkAbstractBoard {
-    public MnkRhombusBoard(int mCols, int nRows, int kCellsToWin) {
-        super(mCols, nRows, kCellsToWin);
+    public MnkRhombusBoard(MnkParameters mnkParameters) {
+        super(mnkParameters);
     }
 
     @Override

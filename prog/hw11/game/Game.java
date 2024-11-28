@@ -28,10 +28,8 @@ public class Game {
     }
 
     private int move(final Board board, final Player player, final int no) {
-        System.out.println("Board");
-        System.out.println(board.getPosition());
+        printBoard(board);
         System.out.println(board.getPosition().getCell() + "'s move");
-        System.out.println("Enter row and column");
         final Move move = player.move(board.getPosition());
         if (move == null) {
             System.out.println("Player " + no + " lose");
@@ -42,16 +40,23 @@ public class Game {
             System.out.println("Player " + no + " move: " + move);
         }
         if (result == Result.WIN) {
+            printBoard(board);
             System.out.println("Player " + no + " won");
             return no;
         } else if (result == Result.LOSE) {
+            printBoard(board);
             System.out.println("Player " + no + " lose");
             return 3 - no;
         } else if (result == Result.DRAW) {
+            printBoard(board);
             System.out.println("Draw");
             return 0;
         } else {
             return -1;
         }
+    }
+
+    private void printBoard(final Board board) {
+        System.out.println(board.getPosition());
     }
 }

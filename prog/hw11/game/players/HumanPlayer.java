@@ -22,6 +22,7 @@ public class HumanPlayer implements Player {
 
     @Override
     public Move move(final Position position) {
+        System.out.println("Enter row and column");
         Move move;
         while (true) {
             try {
@@ -31,11 +32,11 @@ public class HumanPlayer implements Player {
                 if (position.isValid(move)) {
                     break;
                 } else {
-                    System.out.println("Move " + move + " is invalid. Repeat enter.");
+                    out.println("Move " + move + " is invalid. Repeat enter.");
                     in.nextLine();
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Row and column must be integers. Repeat enter.");
+                out.println("Row and column must be integers. Repeat enter.");
                 in.nextLine();
             }
         }

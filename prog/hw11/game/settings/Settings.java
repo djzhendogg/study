@@ -16,25 +16,19 @@ import java.util.Scanner;
 public class Settings {
     private final PrintStream out;
     private final Scanner in;
-//    TODO: вообще они final - пообарачивать это все в классы
-    private BoardMode boardMode;
+    private final BoardMode boardMode;
+    private final PlayerMode playerMode;
+    private final TwoPlayers twoPlayers;
+    private final MnkParameters mnkParameters;
     private Board board;
-    private PlayerMode playerMode;
-    private Player player1;
-    private Player player2;
-
-    private int m;
-    private int n;
-    private int k;
 
     public Settings(final PrintStream out, final Scanner in) {
         this.out = out;
         this.in = in;
-
-        setBoardMode();
-        setGameParameters();
-        setGameMode();
-        setGamePlayers();
+        this.boardMode = setBoardMode();
+        this.mnkParameters = setGameParameters();
+        this.playerMode = setGameMode();
+        this.twoPlayers = setGamePlayers();
         resetBoard();
     }
 
@@ -47,34 +41,23 @@ public class Settings {
     }
 
     public Player getPlayer1() {
-        return player1;
+        return twoPlayers.getPlayer1();
     }
 
     public Player getPlayer2() {
-        return player2;
+        return twoPlayers.getPlayer2();
     }
 
-    public int getM() {
-        return m;
-    }
-
-    public int getN() {
-        return n;
-    }
-
-    public int getK() {
-        return k;
-    }
-
-    private void setBoardMode() {
+    private BoardMode setBoardMode() {
         out.println("Choose A Board:\n1. classic.\n2. rhombus.");
+        BoardMode result;
         while (true) {
             try {
                 int val = in.nextInt();
                 if (val == 1) {
-                    this.boardMode = BoardMode.CLASSIC;
+                    result = BoardMode.CLASSIC;
                 } else if (val == 2) {
-                    this.boardMode = BoardMode.RHOMBUS;
+                    result = BoardMode.RHOMBUS;
                 } else {
                     out.println("I don't understand. Repeat enter:\n1. classic.\n2. rhombus.");
                     in.nextLine();
@@ -86,19 +69,21 @@ public class Settings {
                 in.nextLine();
             }
         }
+        return result;
     }
 
-    private void setGameMode() {
+    private PlayerMode setGameMode() {
         out.println("Game Settings:\n1. single play.\n2. coop play.\n3. robot play.");
+        PlayerMode result;
         while (true) {
             try {
                 int val = in.nextInt();
                 if (val == 1) {
-                    this.playerMode = PlayerMode.SINGLE;
+                    result = PlayerMode.SINGLE;
                 } else if (val == 2) {
-                    this.playerMode = PlayerMode.COOP;
+                    result = PlayerMode.COOP;
                 } else if (val == 3) {
-                    this.playerMode = PlayerMode.ROBOT;
+                    result = PlayerMode.ROBOT;
                 } else {
                     out.println("I don't understand. Repeat enter:\n1. classic.\n2. rhombus.");
                     in.nextLine();
@@ -110,52 +95,54 @@ public class Settings {
                 in.nextLine();
             }
         }
+        return result;
     }
 
-    private void setGamePlayers() {
+    private TwoPlayers setGamePlayers() {
+        Player player1;
+        Player player2;
         if (playerMode == PlayerMode.SINGLE) {
-            this.player1 = new HumanPlayer();
-            this.player2 = setPlayer();
+            player1 = new HumanPlayer();
+            player2 = setPlayer();
         } else if (playerMode == PlayerMode.COOP) {
-            this.player1 = new HumanPlayer();
-            this.player2 = new HumanPlayer();
+            player1 = new HumanPlayer();
+            player2 = new HumanPlayer();
         } else {
-            this.player1 = setPlayer();
-            this.player2 = setPlayer();
+            player1 = setPlayer();
+            player2 = setPlayer();
         }
+        return new TwoPlayers(player1, player2);
     }
 
-    private void setGameParameters() {
+    private MnkParameters setGameParameters() {
+        int mValue = setM();
         if (boardMode == BoardMode.CLASSIC) {
-            setM();
-            setN();
-            setK(Math.max(m, n));
+            int nValue = setN();
+            return new MnkParameters(mValue, nValue, setK(Math.max(mValue, nValue)));
         } else {
-            setM();
-            m = m * 2 - 1;
-            this.n = m;
-            setK(m);
+            mValue = mValue * 2 - 1;
+            return new MnkParameters(mValue, mValue, setK(mValue));
         }
     }
 
     public void resetBoard() {
         if (boardMode == BoardMode.CLASSIC) {
-            board = new MnkRectangleBoard(m, n, k);
+            board = new MnkRectangleBoard(mnkParameters);
         } else {
-            board = new MnkRhombusBoard(m, n, k);
+            board = new MnkRhombusBoard(mnkParameters);
         }
     }
 
     private Player setPlayer() {
         out.println("Choose Opponent:\n1. random player.\n2. sequential player.");
-        Player res;
+        Player result;
         while (true) {
             try {
                 int val = in.nextInt();
                 if (val == 1) {
-                    res = new RandomPlayer(m, n);
+                    result = new RandomPlayer(mnkParameters.getM(), mnkParameters.getN());
                 } else if (val == 2) {
-                    res = new SequentialPlayer(m, n);
+                    result = new SequentialPlayer(mnkParameters.getM(), mnkParameters.getN());
                 } else {
                     out.println("I don't understand. Repeat enter:\n1. classic.\n2. rhombus.");
                     in.nextLine();
@@ -167,22 +154,22 @@ public class Settings {
                 in.nextLine();
             }
         }
-        return res;
+        return result;
     }
 
-    private void setM() {
-        this.m = setParam("m", 0);
+    private int setM() {
+         return setParam("m", 0);
     }
 
-    private void setN() {
-        this.n = setParam("n", 0);;
+    private int setN() {
+        return setParam("n", 0);
     }
 
-    private void setK(int maxVal) {
-        this.k = setParam("k", maxVal);;
+    private int setK(int maxVal) {
+        return setParam("k", maxVal);
     }
 
-    private int setParam(String param, int mustBeLessThen) {
+    private int setParam(String param, int maxNumber) {
         out.printf("Enter %s value:%n", param);
         int res;
         while (true) {
@@ -193,14 +180,14 @@ public class Settings {
                     in.nextLine();
                     continue;
                 }
-                if (Objects.equals(param, "k") && res > mustBeLessThen) {
-                    out.printf("Wrong value. Value must be <= %d. Repeat enter:%n", mustBeLessThen);
+                if (Objects.equals(param, "k") && res > maxNumber) {
+                    out.printf("Wrong value. Value must be <= %d. Repeat enter:%n", maxNumber);
                     in.nextLine();
                     continue;
                 }
                 break;
             } catch (InputMismatchException ex) {
-                out.println("Wrong value. Value must be number. Repeat enter:");
+                out.println("Wrong value. Value must be a number. Repeat enter:");
                 in.nextLine();
             }
         }
