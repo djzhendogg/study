@@ -2,7 +2,7 @@ package expression;
 
 import java.util.Objects;
 
-public class Const implements Expression {
+public class Const implements VariableExpression {
     private final int value;
 
     public Const(int value) {
@@ -16,6 +16,11 @@ public class Const implements Expression {
 
     @Override
     public int evaluate(int x) {
+        return value;
+    }
+
+    @Override
+    public int evaluate(int x, int y, int z) {
         return value;
     }
 

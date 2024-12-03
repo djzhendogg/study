@@ -1,8 +1,12 @@
 package expression;
 
 public class Multiply extends BinaryOperator {
+    public Multiply(VariableExpression operand1, VariableExpression operand2) {
+        super("*", 2, operand1, operand2, true, true);
+    }
+
     public Multiply(Expression operand1, Expression operand2) {
-        super("*", 1, operand1, operand2);
+        super("*", 2, operand1, operand2, true, true);
     }
 
     @Override

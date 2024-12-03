@@ -1,8 +1,6 @@
 package expression;
 
-import java.util.Objects;
-
-public class Variable implements Expression {
+public class Variable implements VariableExpression {
     private final String value;
 
     public Variable(String value) {
@@ -17,6 +15,17 @@ public class Variable implements Expression {
     @Override
     public int evaluate(int x) {
         return x;
+    }
+
+    @Override
+    public int evaluate(int x, int y, int z) {
+        if (value.equals("x")) {
+            return x;
+        } else if (value.equals("y")) {
+            return y;
+        } else {
+            return z;
+        }
     }
 
     @Override

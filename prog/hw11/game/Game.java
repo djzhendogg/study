@@ -31,6 +31,7 @@ public class Game {
         printBoard(board);
         System.out.println(board.getPosition().getCell() + "'s move");
         final Move move = player.move(board.getPosition());
+        // поднять while из плееров суда
         if (move == null) {
             System.out.println("Player " + no + " lose");
             return 3 - no;

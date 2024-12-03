@@ -1,26 +1,22 @@
-from SVM import SVMClassifier
-import random
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import f1_score
+import requests
+import json
+import pandas as pd
 
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import MinMaxScaler
+headers = {
+    'accept': 'application/json',
+    'Content-Type': 'application/json',
+}
 
-from sklearn.datasets import load_breast_cancer
+sequences = ["CTAG", "ATGC", "AXRT"]
+dna_fin_data = pd.DataFrame()
+params = {
+    'sequences': ', '.join(sequences),
+    'polymer_type': 'RNA',
+    'encoding_strategy': 'aptamer',
+    'skip_unprocessable': 'true',
+}
 
-
-X, y = load_breast_cancer(return_X_y=True)
-scaler = MinMaxScaler()
-X = scaler.fit_transform(X)
-pca = PCA(n_components=2)
-X = pca.fit_transform(X)
-y[y == 0] = -1
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-model = SVMClassifier(kernel="polynom", polynom_degree=1, lr=0.01, C=5)
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
-accuracy_score(y_test, y_pred)
+response = requests.post('https://ai-chemistry.itmo.ru/api/encode_sequence', params=params, headers=headers)
+assert response.status_code == 200
+result = json.loads(response.content)
+print(result)
