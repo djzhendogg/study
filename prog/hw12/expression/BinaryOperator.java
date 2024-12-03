@@ -5,16 +5,16 @@ import java.util.Objects;
 public abstract class BinaryOperator implements VariableExpression {
     private final String value;
     private final int priority;
-    private final Expression operand1;
-    private final Expression operand2;
+    private final VariableExpression operand1;
+    private final VariableExpression operand2;
     private final boolean isCommutative;
     private final boolean isAssociative;
 
     public BinaryOperator(
             String value,
             int priority,
-            Expression operand1,
-            Expression operand2,
+            VariableExpression operand1,
+            VariableExpression operand2,
             boolean isCommutative,
             boolean isAssociative
     ) {

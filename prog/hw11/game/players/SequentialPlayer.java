@@ -22,6 +22,6 @@ public class SequentialPlayer implements Player {
                 }
             }
         }
-        return null;
+        throw new IllegalStateException("Invalid game state");
     }
 }

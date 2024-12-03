@@ -3,14 +3,17 @@ package expression.parser;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class BaseParser {
-//    private static final char END = '\0';
-//    private final CharSource source;
-//    private char ch = 0xffff;
+public abstract class BaseParser {
+    private static final char END = '\0';
+    protected CharSource source;
+    private char ch = 0xffff;
 
-    protected BaseParser(final CharSource source) {
+    protected void setSource(final CharSource source) {
         this.source = source;
-        take();
+    }
+
+    protected char get() {
+        return ch;
     }
 
     protected char take() {
@@ -19,16 +22,16 @@ public class BaseParser {
         return result;
     }
 
-    protected boolean test(final char expected) {
-        return ch == expected;
-    }
-
     protected boolean take(final char expected) {
         if (test(expected)) {
             take();
             return true;
         }
         return false;
+    }
+
+    protected boolean test(final char expected) {
+        return ch == expected;
     }
 
     protected void expect(final char expected) {
@@ -53,5 +56,11 @@ public class BaseParser {
 
     protected boolean between(final char from, final char to) {
         return from <= ch && ch <= to;
+    }
+
+    protected void skipWhitespace() {
+        while (Character.isWhitespace(ch)) {
+            take();
+        }
     }
 }
