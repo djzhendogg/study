@@ -29,14 +29,16 @@ public abstract class UnaryOperator implements VariableExpression {
 
     @Override
     public String toString() {
-        return "(" + value + " " + operand.toString() + ")";
+        return value + "(" + operand.toString() + ")";
     }
 
     @Override
     public String toMiniString() {
         StringBuilder sb = new StringBuilder();
         sb.append(value);
-        sb.append(" ");
+        if (!needBrackets()) {
+            sb.append(" ");
+        }
         if (needBrackets()) {
             sb.append("(");
         }

@@ -52,24 +52,28 @@ public class ExpressionParser extends BaseParser implements TripleParser {
             expect(')');
             return res;
         } else if (take('-')) {
-            return parseUnaryMinus();
+            if (Character.isDigit(get())) {
+                return parseConst(true);
+            } else {
+                return parseUnaryMinus();
+            }
         } else {
             return parseAtom();
         }
     }
 
     private VariableExpression parseUnaryMinus() {
-        return new UnaryMinus(parseAtom());
+        return new UnaryMinus(parsePrimary());
     }
 
     private VariableExpression parseAtom() {
         skipWhitespace();
         if (Character.isDigit(get())) {
-            return parseConst();
+            return parseConst(false);
         } else if (Character.isLetter(get())) {
             return parseVariable();
         } else {
-            throw source.error("Variable or constant expeсted '" + take() + "' found");
+            throw source.error("Variable or constant expected '" + take() + "' found");
         }
     }
 
@@ -80,8 +84,11 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         return null;
     }
 
-    private VariableExpression parseConst() {
+    private VariableExpression parseConst(boolean isNegative) {
         StringBuilder sb = new StringBuilder();
+        if (isNegative) {
+            sb.append('-');
+        }
         while (Character.isDigit(get())) {
             sb.append(take());
         }
