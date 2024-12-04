@@ -5,7 +5,7 @@ import expression.*;
 import java.util.Set;
 
 public class ExpressionParser extends BaseParser implements TripleParser {
-    private final Set<Character> possibleVariables = Set.of('x', 'y', 'z');
+//    private final Set<Character> possibleVariables = Set.of('x', 'y', 'z');
 
     @Override
     public VariableExpression parse(String expression) {
@@ -78,10 +78,11 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     }
 
     private VariableExpression parseVariable() {
-        if (possibleVariables.contains(get())) {
-            return new Variable(Character.toString(take()));
+        StringBuilder sb = new StringBuilder();
+        while (Character.isLetterOrDigit(get())) {
+            sb.append(take());
         }
-        return null;
+        return new Variable(sb.toString());
     }
 
     private VariableExpression parseConst(boolean isNegative) {

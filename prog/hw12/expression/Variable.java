@@ -19,12 +19,14 @@ public class Variable implements VariableExpression {
 
     @Override
     public int evaluate(int x, int y, int z) {
-        if (value.equals("x")) {
+        if (value.endsWith("x")) {
             return x;
-        } else if (value.equals("y")) {
+        } else if (value.endsWith("y")) {
             return y;
-        } else {
+        } else if (value.endsWith("z")) {
             return z;
+        } else {
+            throw new IllegalArgumentException("Invalid variable expression");
         }
     }
 
