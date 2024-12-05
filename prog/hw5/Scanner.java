@@ -5,6 +5,7 @@ public class Scanner {
     private static final int BUFFER_SIZE = 2048;
     private final BufferedReader reader;
     private char[] buffer = new char[BUFFER_SIZE];
+    private static final String LINE_SEPARATOR = System.lineSeparator();
     private int readPointer = 0;
     private int lookupPointer = 0;
     private int readedCharNum;
@@ -62,7 +63,10 @@ public class Scanner {
         int len = 0;
         while (hasNext()) {
             char c = nextChar();
-            if (c == 10 || c == 13) {
+            if (c == '\r') {
+                if ( buffer[lookupPointer] == '\n') {
+
+                }
                 break;
             }
             len++;

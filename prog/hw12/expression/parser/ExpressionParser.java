@@ -5,31 +5,31 @@ import expression.*;
 import java.util.Set;
 
 public class ExpressionParser extends BaseParser implements TripleParser {
-//    private final Set<Character> possibleVariables = Set.of('x', 'y', 'z');
+    private final Set<Character> possibleVariables = Set.of('x', 'y', 'z');
 
     @Override
     public VariableExpression parse(String expression) {
         source = new StringSource(expression);
         take();
-        return parseExpression();
+        return parseAdditiveExpression();
     }
 
-    private VariableExpression parseExpression() {
-        VariableExpression primaryLeft = parseOperand();
+    private VariableExpression parseAdditiveExpression() {
+        VariableExpression primaryLeft = parseMultiplicativeExpression();
 
         while (true) {
             skipWhitespace();
             if (take('+')) {
-                primaryLeft = new Add(primaryLeft, parseOperand());
+                primaryLeft = new Add(primaryLeft, parseMultiplicativeExpression());
             } else if (take('-')) {
-                primaryLeft = new Subtract(primaryLeft, parseOperand());
+                primaryLeft = new Subtract(primaryLeft, parseMultiplicativeExpression());
             } else {
                 return primaryLeft;
             }
         }
     }
 
-    private VariableExpression parseOperand() {
+    private VariableExpression parseMultiplicativeExpression() {
         VariableExpression primaryLeft = parsePrimary();
 
         while (true) {
@@ -47,7 +47,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private VariableExpression parsePrimary() {
         skipWhitespace();
         if (take('(')) {
-            VariableExpression res = parseExpression();
+            VariableExpression res = parseAdditiveExpression();
             skipWhitespace();
             expect(')');
             return res;
@@ -57,6 +57,8 @@ public class ExpressionParser extends BaseParser implements TripleParser {
             } else {
                 return parseUnaryMinus();
             }
+        } else if (take('∛')) {
+            return parseCbrt();
         } else {
             return parseAtom();
         }
@@ -66,6 +68,10 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         return new UnaryMinus(parsePrimary());
     }
 
+    private VariableExpression parseCbrt() {
+        return new Cbrt(parsePrimary());
+    }
+
     private VariableExpression parseAtom() {
         skipWhitespace();
         if (Character.isDigit(get())) {
@@ -73,16 +79,15 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         } else if (Character.isLetter(get())) {
             return parseVariable();
         } else {
-            throw source.error("Variable or constant expected '" + take() + "' found");
+            throw source.error("Variable or constant value expected, '" + take() + "' found");
         }
     }
 
     private VariableExpression parseVariable() {
-        StringBuilder sb = new StringBuilder();
-        while (Character.isLetterOrDigit(get())) {
-            sb.append(take());
+        if (possibleVariables.contains(get())) {
+            return new Variable(Character.toString(take()));
         }
-        return new Variable(sb.toString());
+        throw source.error("Invalid variable value: 'x', 'y', 'z' expected '" + take() + "' found");
     }
 
     private VariableExpression parseConst(boolean isNegative) {

@@ -23,10 +23,7 @@ public class Main {
 //        System.out.println(result);
 
         int x = 5;
-        VariableExpression exp = new Divide(
-                new Variable("x"),
-                new UnaryMinus(new Multiply(new Const(1), new Variable("x")))
-        );
+        VariableExpression exp = new Cbrt(new Const(-123));
         int result = exp.evaluate(x);
         System.out.println(exp);
         System.out.println(exp.toMiniString());

@@ -3,18 +3,14 @@ package expression;
 import java.util.Objects;
 
 public abstract class UnaryOperator implements VariableExpression {
-    private final String value;
+    protected final String value;
     private final int priority;
-    private final VariableExpression operand;
+    protected final VariableExpression operand;
 
     public UnaryOperator(String value, int priority, VariableExpression operand) {
         this.value = value;
         this.priority = priority;
         this.operand = operand;
-    }
-
-    public int getPriority() {
-        return priority;
     }
 
     @Override
@@ -30,23 +26,6 @@ public abstract class UnaryOperator implements VariableExpression {
     @Override
     public String toString() {
         return value + "(" + operand.toString() + ")";
-    }
-
-    @Override
-    public String toMiniString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(value);
-        if (!needBrackets()) {
-            sb.append(" ");
-        }
-        if (needBrackets()) {
-            sb.append("(");
-        }
-        sb.append(operand.toMiniString());
-        if (needBrackets()) {
-            sb.append(")");
-        }
-        return sb.toString();
     }
 
     @Override
@@ -71,7 +50,7 @@ public abstract class UnaryOperator implements VariableExpression {
 
     public abstract int calculate(int x);
 
-    private boolean needBrackets() {
+    protected boolean needBrackets() {
         if (operand instanceof BinaryOperator op) {
             return op.getPriority() < priority;
         }

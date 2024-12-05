@@ -5,7 +5,7 @@ import expression.VariableExpression;
 public class Test {
     public static void main(String[] args) {
         //        String before = "x/ -   -   - 1";
-        String before = "-((idy + z))";
+        String before = "-(0)";
         ExpressionParser parser = new ExpressionParser();
         VariableExpression result = parser.parse(before);
         System.out.println(result);
