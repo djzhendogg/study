@@ -6,13 +6,13 @@ public class Main {
     public static void main(String[] args) {
 //        Scanner in = new Scanner(System.in);
 //        int x = in.nextInt();
-//        VariableExpression exp = new Add(
-//                new Subtract(
-//                        new Multiply(
+//        VariableExpression exp = new CheckedAdd(
+//                new CheckedSubtract(
+//                        new CheckedMultiply(
 //                                new Variable("x"),
 //                                new Variable("x")
 //                        ),
-//                        new Multiply(
+//                        new CheckedMultiply(
 //                                new Const(2),
 //                                new Variable("x")
 //                        )
