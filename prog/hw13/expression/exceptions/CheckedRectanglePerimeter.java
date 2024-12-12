@@ -21,18 +21,12 @@ public class CheckedRectanglePerimeter extends CheckedBinaryOperator {
 
     @Override
     protected boolean hasOverflow(int x, int y) {
-        if (checkMultiplyOverflow(x, 2) || checkMultiplyOverflow(y, 2)) {
+        if (
+                OverflowConstraints.checkMultiplyOverflow(x, 2) ||
+                OverflowConstraints.checkMultiplyOverflow(y, 2)
+        ) {
             return true;
         }
-        return checkSumOverflow(x * 2, y * 2);
-    }
-
-    private boolean checkSumOverflow(int x, int y) {
-        return x > 0 ? Integer.MAX_VALUE - x < y: Integer.MIN_VALUE - x > y;
-    }
-
-    private boolean checkMultiplyOverflow(int x, int y) {
-        int maxVal = Integer.signum(x) == Integer.signum(y) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-        return x != 0  && ((y > 0 && maxVal / x > 0 && maxVal / x < y) || (y < 0 && maxVal / x > y));
+        return OverflowConstraints.checkAddOverflow(x * 2, y * 2);
     }
 }

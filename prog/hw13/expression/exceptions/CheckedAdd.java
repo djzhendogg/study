@@ -15,6 +15,6 @@ public class CheckedAdd extends CheckedBinaryOperator {
 
     @Override
     protected boolean hasOverflow(int x, int y) {
-        return x > 0 ? Integer.MAX_VALUE - x < y: Integer.MIN_VALUE - x > y;
+        return OverflowConstraints.checkAddOverflow(x, y);
     }
 }

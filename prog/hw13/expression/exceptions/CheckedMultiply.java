@@ -15,7 +15,6 @@ public class CheckedMultiply extends CheckedBinaryOperator {
 
     @Override
     protected boolean hasOverflow(int x, int y) {
-        int maxVal = Integer.signum(x) == Integer.signum(y) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-        return x != 0  && ((y > 0 && maxVal / x > 0 && maxVal / x < y) || (y < 0 && maxVal / x > y));
+        return OverflowConstraints.checkMultiplyOverflow(x, y);
     }
 }

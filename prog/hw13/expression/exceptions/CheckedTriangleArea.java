@@ -35,19 +35,10 @@ public class CheckedTriangleArea extends CheckedBinaryOperator {
         }
         int biggest = x > y ? x : y;
         int lowest = x <= y ? x : y;
-        boolean result = checkDivideOverflow(biggest, 2);
+        boolean result = OverflowConstraints.checkDivideOverflow(biggest, 2);
         if (!result) {
-            result = checkMultiplyOverflow(biggest / 2, lowest);
+            result = OverflowConstraints.checkMultiplyOverflow(biggest / 2, lowest);
         }
         return result ;
-    }
-
-    private boolean checkDivideOverflow(int x, int y) {
-        return x == Integer.MIN_VALUE && y == -1;
-    }
-
-    private boolean checkMultiplyOverflow(int x, int y) {
-        int maxVal = Integer.signum(x) == Integer.signum(y) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-        return x != 0  && ((y > 0 && maxVal / x > 0 && maxVal / x < y) || (y < 0 && maxVal / x > y));
     }
 }
