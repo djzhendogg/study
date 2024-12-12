@@ -8,13 +8,13 @@ public class CheckedSubtract extends CheckedBinaryOperator {
     }
 
     @Override
-    public int calculate(int x, int y) {
+    protected int calculate(int x, int y) {
         checkOverflow(x, y);
         return x - y;
     }
 
     @Override
-    public boolean hasOverflow(int x, int y) {
+    protected boolean hasOverflow(int x, int y) {
         int c = x - y;
         if (x > y) {
             return c < 0;

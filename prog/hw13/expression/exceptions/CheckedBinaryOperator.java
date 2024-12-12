@@ -16,9 +16,9 @@ public abstract class CheckedBinaryOperator extends BinaryOperator {
         super(value, priority, operand1, operand2, isCommutative, isAssociative);
     }
 
-    public abstract boolean hasOverflow(int x, int y);
+    protected abstract boolean hasOverflow(int x, int y);
 
-    public void checkOverflow(int x, int y) {
+    protected void checkOverflow(int x, int y) {
         if (hasOverflow(x, y)) {
             throw new IntOverflowException(this.toString());
         }

@@ -9,9 +9,9 @@ public abstract class CheckedUnaryOperator extends UnaryOperator {
         super(value, priority, operand);
     }
 
-    public abstract boolean hasOverflow(int x);
+    protected abstract boolean hasOverflow(int x);
 
-    public void checkOverflow(int x) {
+    protected void checkOverflow(int x) {
         if (hasOverflow(x)) {
             throw new IntOverflowException(this.toString());
         }

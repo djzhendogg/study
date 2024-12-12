@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         TripleParser parser = new ExpressionParser();
         try {
-            TripleExpression expression = parser.parse(" - -2147483648");
+            TripleExpression expression = parser.parse("(0 ◣ 0)");
             System.out.println(expression.evaluate(0, 1, 1));
 //            System.out.println(expression.evaluate(1, 1, 1));
 //            System.out.println(expression.evaluate(3, 1, 1));

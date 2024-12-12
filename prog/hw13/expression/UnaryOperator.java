@@ -48,7 +48,7 @@ public abstract class UnaryOperator implements VariableExpression {
         return ((((17 + value.hashCode()) * 31 + priority) * 23) + operandHash) * 41;
     }
 
-    public abstract int calculate(int x);
+    protected abstract int calculate(int x);
 
     protected boolean needBrackets() {
         if (operand instanceof BinaryOperator op) {

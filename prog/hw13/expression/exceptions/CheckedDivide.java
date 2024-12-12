@@ -9,7 +9,7 @@ public class CheckedDivide extends CheckedBinaryOperator {
     }
 
     @Override
-    public int calculate(int x, int y) {
+    protected int calculate(int x, int y) {
         if (y == 0) {
             throw new ZeroDivisionException(this.toString());
         }
@@ -18,7 +18,7 @@ public class CheckedDivide extends CheckedBinaryOperator {
     }
 
     @Override
-    public boolean hasOverflow(int x, int y) {
+    protected boolean hasOverflow(int x, int y) {
         return x == Integer.MIN_VALUE && y == -1;
     }
 }

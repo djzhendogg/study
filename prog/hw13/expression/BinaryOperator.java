@@ -95,7 +95,7 @@ public abstract class BinaryOperator implements VariableExpression {
         return (((((17 + value.hashCode()) * 31 + priority) * 23) + operand1Hash) * 41 + operand2Hash) * 59;
     }
 
-    public abstract int calculate(int x, int y);
+    protected abstract int calculate(int x, int y);
 
     private boolean needBracketsRight() {
         if (operand2 instanceof BinaryOperator operand) {

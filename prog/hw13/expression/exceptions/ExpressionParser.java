@@ -13,9 +13,24 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     public VariableExpression parse(String expression) {
         source = new StringSource(expression);
         take();
-        VariableExpression result = parseAdditiveExpression();
+        VariableExpression result = parseGeometricExpression();
         expectEnd();
         return result;
+    }
+
+    private VariableExpression parseGeometricExpression() {
+        VariableExpression primaryLeft = parseAdditiveExpression();
+
+        while (true) {
+            skipWhitespace();
+            if (take('▯')) {
+                primaryLeft = new CheckedRectanglePerimeter(primaryLeft, parseAdditiveExpression());
+            } else if (take('◣')) {
+                primaryLeft = new CheckedTriangleArea(primaryLeft, parseAdditiveExpression());
+            } else {
+                return primaryLeft;
+            }
+        }
     }
 
     private VariableExpression parseAdditiveExpression() {
@@ -51,7 +66,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
     private VariableExpression parsePrimary() {
         skipWhitespace();
         if (take('(')) {
-            VariableExpression res = parseAdditiveExpression();
+            VariableExpression res = parseGeometricExpression();
             skipWhitespace();
             expectBracket();
             return res;
