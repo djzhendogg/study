@@ -1,7 +1,7 @@
 package expression.exceptions;
 
 import expression.VariableExpression;
-import expression.exceptions.expresion_exceptions.NegativeGeomVariable;
+import expression.exceptions.expresion_exceptions.NegativeGeomValue;
 
 public class CheckedTriangleArea extends CheckedBinaryOperator {
     public CheckedTriangleArea(VariableExpression operand1, VariableExpression operand2) {
@@ -11,9 +11,9 @@ public class CheckedTriangleArea extends CheckedBinaryOperator {
     @Override
     protected int calculate(int x, int y) {
         if (x < 0) {
-            throw new NegativeGeomVariable(x, this.toString());
+            throw new NegativeGeomValue(x, this.toString());
         } else if (y < 0) {
-            throw new NegativeGeomVariable(y, this.toString());
+            throw new NegativeGeomValue(y, this.toString());
         }
         checkOverflow(x, y);
         if (y % 2 == 0 || x % 2 == 1 && y > x) {
