@@ -9,6 +9,7 @@ public class CheckedNegate extends CheckedUnaryOperator {
 
     @Override
     public int calculate(int x) {
+        checkOverflow(x);
         return -x;
     }
 
@@ -27,5 +28,9 @@ public class CheckedNegate extends CheckedUnaryOperator {
             sb.append(")");
         }
         return sb.toString();
+    }
+
+    public boolean hasOverflow(int x) {
+        return x == Integer.MIN_VALUE;
     }
 }
