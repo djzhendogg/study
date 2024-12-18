@@ -33,10 +33,6 @@ public abstract class BaseParser {
         return source.error(message);
     }
 
-    protected boolean between(final char from, final char to) {
-        return from <= ch && ch <= to;
-    }
-
     protected void skipWhitespace() {
         while (Character.isWhitespace(ch)) {
             take();

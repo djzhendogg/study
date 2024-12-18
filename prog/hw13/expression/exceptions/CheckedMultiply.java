@@ -14,7 +14,7 @@ public class CheckedMultiply extends CheckedBinaryOperator {
     }
 
     @Override
-    protected boolean hasOverflow(int x, int y) {
-        return OverflowConstraints.checkMultiplyOverflow(x, y);
+    protected boolean hasOverflow(int left, int right) {
+        return OverflowConstraints.checkMultiplyOverflow(left, right);
     }
 }

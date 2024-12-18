@@ -20,13 +20,13 @@ public class CheckedRectanglePerimeter extends CheckedBinaryOperator {
     }
 
     @Override
-    protected boolean hasOverflow(int x, int y) {
+    protected boolean hasOverflow(int left, int right) {
         if (
-                OverflowConstraints.checkMultiplyOverflow(x, 2) ||
-                OverflowConstraints.checkMultiplyOverflow(y, 2)
+                OverflowConstraints.checkMultiplyOverflow(left, 2) ||
+                OverflowConstraints.checkMultiplyOverflow(right, 2)
         ) {
             return true;
         }
-        return OverflowConstraints.checkAddOverflow(x * 2, y * 2);
+        return OverflowConstraints.checkAddOverflow(left * 2, right * 2);
     }
 }

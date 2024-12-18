@@ -6,6 +6,6 @@ public class UnsupportedModeException extends RuntimeException {
     }
 
     public UnsupportedModeException(String found, String availableModes) {
-        super("Unsupported mode given: %s. Available modes: %s.".formatted(found, availableModes));
+        super("Unsupported mode given: " + found+ ". Available modes: " + availableModes);
     }
 }

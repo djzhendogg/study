@@ -22,7 +22,7 @@ public class CheckedTriangleArea extends CheckedBinaryOperator {
             y = z;
         }
         int result = x / 2 * y;
-        if (x % 2 == 1 && y % 2 == 1 && y != 1) {
+        if (x % 2 == 1 && y != 1) {
             result += 1;
         }
         return result;
@@ -39,6 +39,6 @@ public class CheckedTriangleArea extends CheckedBinaryOperator {
         if (!result) {
             result = OverflowConstraints.checkMultiplyOverflow(biggest / 2, lowest);
         }
-        return result ;
+        return result;
     }
 }

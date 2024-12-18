@@ -14,7 +14,7 @@ public class CheckedAdd extends CheckedBinaryOperator {
     }
 
     @Override
-    protected boolean hasOverflow(int x, int y) {
-        return OverflowConstraints.checkAddOverflow(x, y);
+    protected boolean hasOverflow(int left, int right) {
+        return OverflowConstraints.checkAddOverflow(left, right);
     }
 }

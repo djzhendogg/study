@@ -1,7 +1,6 @@
 package expression.exceptions;
 
 import expression.Const;
-import expression.Cbrt;
 import expression.Variable;
 import expression.VariableExpression;
 import expression.exceptions.expresion_exceptions.*;
@@ -76,8 +75,6 @@ public class ExpressionParser extends BaseParser implements TripleParser {
             } else {
                 return parseUnaryMinus();
             }
-        } else if (take('∛')) {
-            return parseCbrt();
         } else {
             return parseAtom();
         }
@@ -85,10 +82,6 @@ public class ExpressionParser extends BaseParser implements TripleParser {
 
     private VariableExpression parseUnaryMinus() {
         return new CheckedNegate(parsePrimary());
-    }
-
-    private VariableExpression parseCbrt() {
-        return new Cbrt(parsePrimary());
     }
 
     private VariableExpression parseAtom() {

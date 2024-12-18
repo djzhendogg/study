@@ -14,7 +14,7 @@ public class CheckedSubtract extends CheckedBinaryOperator {
     }
 
     @Override
-    protected boolean hasOverflow(int x, int y) {
-        return OverflowConstraints.checkSubtractOverflow(x, y);
+    protected boolean hasOverflow(int left, int right) {
+        return OverflowConstraints.checkSubtractOverflow(left, right);
     }
 }

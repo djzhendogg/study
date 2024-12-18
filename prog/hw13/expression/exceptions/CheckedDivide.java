@@ -18,7 +18,7 @@ public class CheckedDivide extends CheckedBinaryOperator {
     }
 
     @Override
-    protected boolean hasOverflow(int x, int y) {
-        return OverflowConstraints.checkDivideOverflow(x, y);
+    protected boolean hasOverflow(int left, int right) {
+        return OverflowConstraints.checkDivideOverflow(left, right);
     }
 }
