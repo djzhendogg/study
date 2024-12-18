@@ -4,7 +4,7 @@ package expression.parser;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public abstract class BaseParser {
-    private static final char END = '\0';
+    protected static final char END = '\0';
     protected CharSource source;
     private char ch = 0xffff;
 

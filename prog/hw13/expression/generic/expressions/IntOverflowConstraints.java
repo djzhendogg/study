@@ -1,6 +1,6 @@
 package expression.generic.expressions;
 
-public class MathConstraints {
+public class IntOverflowConstraints {
     public static boolean checkDivideOverflow(int left, int right) {
         return left == Integer.MIN_VALUE && right == -1;
     }

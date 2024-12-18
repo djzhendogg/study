@@ -3,24 +3,24 @@ package expression.generic.operation_types;
 import expression.exceptions.expresion_exceptions.ConstValueException;
 import expression.exceptions.expresion_exceptions.IntOverflowException;
 import expression.exceptions.expresion_exceptions.ZeroDivisionException;
-import expression.generic.expressions.MathConstraints;
+import expression.generic.expressions.IntOverflowConstraints;
 
 public class IntOperations implements NumericOperations<Integer> {
     @Override
     public Integer add(Integer left, Integer right) {
-        validateOverflow(MathConstraints.checkAddOverflow(left, right));
+        validateOverflow(IntOverflowConstraints.checkAddOverflow(left, right));
         return left + right;
     }
 
     @Override
     public Integer substarct(Integer left, Integer right) {
-        validateOverflow(MathConstraints.checkSubtractOverflow(left, right));
+        validateOverflow(IntOverflowConstraints.checkSubtractOverflow(left, right));
         return left - right;
     }
 
     @Override
     public Integer multiply(Integer left, Integer right) {
-        validateOverflow(MathConstraints.checkMultiplyOverflow(left, right));
+        validateOverflow(IntOverflowConstraints.checkMultiplyOverflow(left, right));
         return left * right;
     }
 
@@ -29,13 +29,13 @@ public class IntOperations implements NumericOperations<Integer> {
         if (right == 0) {
             throw new ZeroDivisionException(this.toString());
         }
-        validateOverflow(MathConstraints.checkDivideOverflow(left, right));
+        validateOverflow(IntOverflowConstraints.checkDivideOverflow(left, right));
         return left / right;
     }
 
     @Override
     public Integer negate(Integer x) {
-        validateOverflow(MathConstraints.checkNegativeOverflow(x));
+        validateOverflow(IntOverflowConstraints.checkNegativeOverflow(x));
         return -x;
     }
 

@@ -1,5 +1,9 @@
 package expression.generic.parser;
 
+import expression.exceptions.expresion_exceptions.ConstValueException;
+import expression.exceptions.expresion_exceptions.EndOfFileException;
+import expression.exceptions.expresion_exceptions.ExpectAtomException;
+import expression.exceptions.expresion_exceptions.UnknownVariableException;
 import expression.parser.BaseParser;
 import expression.generic.expressions.*;
 import expression.generic.operation_types.NumericOperations;
@@ -16,7 +20,9 @@ public class ExpressionParser<T extends Number> extends BaseParser implements Tr
     public TripleExpression<T> parse(String expression) {
         source = new StringSource(expression);
         take();
-        return parseAdditiveExpression();
+        TripleExpression<T> result = parseAdditiveExpression();
+        expectEnd();
+        return result;
     }
 
     private TripleExpression<T> parseAdditiveExpression() {
@@ -78,7 +84,7 @@ public class ExpressionParser<T extends Number> extends BaseParser implements Tr
         } else if (Character.isLetter(get())) {
             return parseVariable();
         } else {
-            throw source.error("Variable or constant value expected, '" + take() + "' found");
+            throw new ExpectAtomException(take());
         }
     }
 
@@ -87,17 +93,37 @@ public class ExpressionParser<T extends Number> extends BaseParser implements Tr
         while (Character.isLetterOrDigit(get())) {
             sb.append(take());
         }
-        return new Variable<>(sb.toString());
+        String result = sb.toString();
+        if (!isValidVariable(result)) {
+            throw new UnknownVariableException(result);
+        }
+        return new Variable<>(result);
     }
 
     private TripleExpression<T> parseConst(boolean isNegative) {
         StringBuilder sb = new StringBuilder();
+        T result;
         if (isNegative) {
             sb.append('-');
         }
         while (Character.isDigit(get())) {
             sb.append(take());
         }
-        return new Const<>(operations.parse(sb.toString()));
+        try {
+            result = operations.parse(sb.toString());
+        } catch (NumberFormatException e) {
+            throw new ConstValueException(sb.toString(), e);
+        }
+        return new Const<>(result);
+    }
+
+    private void expectEnd() {
+        if (!take(END)) {
+            throw new EndOfFileException(get());
+        }
+    }
+
+    private boolean isValidVariable(String value) {
+        return value.endsWith("x") || value.endsWith("z") || value.endsWith("y");
     }
 }
