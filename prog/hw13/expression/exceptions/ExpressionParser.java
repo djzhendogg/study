@@ -132,7 +132,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
 
     private void expectBracket() {
         if (!take(')')) {
-            throw new ExpectBracketException(get());
+            throw new ExpectBracketException(')', get());
         }
     }
 

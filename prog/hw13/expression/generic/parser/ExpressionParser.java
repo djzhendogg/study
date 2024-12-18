@@ -1,15 +1,17 @@
 package expression.generic.parser;
 
-import expression.exceptions.expresion_exceptions.ConstValueException;
-import expression.exceptions.expresion_exceptions.EndOfFileException;
-import expression.exceptions.expresion_exceptions.ExpectAtomException;
-import expression.exceptions.expresion_exceptions.UnknownVariableException;
-import expression.parser.BaseParser;
+import expression.exceptions.expresion_exceptions.*;
+import expression.exceptions.BaseParser;
 import expression.generic.expressions.*;
 import expression.generic.operation_types.NumericOperations;
 import expression.parser.StringSource;
 
+import java.util.Map;
+
 public class ExpressionParser<T extends Number> extends BaseParser implements TripleParser<T> {
+    private static final Map<Character, Character> BRACKETS_PAIRS = Map.of(
+            '(', ')', '{', '}', '[', ']'
+    );
     private final NumericOperations<T> operations;
 
     public ExpressionParser(NumericOperations<T> operations) {
@@ -57,10 +59,14 @@ public class ExpressionParser<T extends Number> extends BaseParser implements Tr
 
     private TripleExpression<T> parsePrimary() {
         skipWhitespace();
-        if (take('(')) {
+        if (test('(') || test('{') || test('[')) {
+            char startBracket = take();
             TripleExpression<T> res = parseAdditiveExpression();
             skipWhitespace();
-            expect(')');
+            if (!test(BRACKETS_PAIRS.get(startBracket))) {
+                throw new ExpectBracketException(BRACKETS_PAIRS.get(startBracket), get());
+            }
+            take();
             return res;
         } else if (take('-')) {
             if (Character.isDigit(get())) {
