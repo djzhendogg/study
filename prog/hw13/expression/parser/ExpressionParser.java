@@ -1,8 +1,7 @@
 package expression.parser;
 
 import expression.*;
-
-import java.util.Set;
+import expression.exceptions.expresion_exceptions.ExpectAtomException;
 
 public class ExpressionParser extends BaseParser implements TripleParser {
     @Override
@@ -77,7 +76,7 @@ public class ExpressionParser extends BaseParser implements TripleParser {
         } else if (Character.isLetter(get())) {
             return parseVariable();
         } else {
-            throw source.error("Variable or constant value expected, '" + take() + "' found");
+            throw new ExpectAtomException(take());
         }
     }
 
