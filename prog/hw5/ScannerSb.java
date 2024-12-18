@@ -1,16 +1,15 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class Scanner {
+public class ScannerSb {
     private static final int BUFFER_SIZE = 2048;
     private final BufferedReader reader;
     private char[] buffer = new char[BUFFER_SIZE];
-    private int readPointer = 0;
     private int lookupPointer = 0;
     private int readedCharNum;
     private Cache cache = null;
 
-    public Scanner(InputStream input) throws UnsupportedEncodingException {
+    public ScannerSb(InputStream input) throws UnsupportedEncodingException {
         this.reader = new BufferedReader(
                 new InputStreamReader(
                         input,
@@ -19,7 +18,7 @@ public class Scanner {
         );
     }
 
-    public Scanner(String input) throws UnsupportedEncodingException {
+    public ScannerSb(String input) throws UnsupportedEncodingException {
         InputStream stream = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
         this.reader = new BufferedReader(
                 new InputStreamReader(
@@ -67,7 +66,7 @@ public class Scanner {
     }
 
     public String nextLine() throws IOException {
-        int len = 0;
+        StringBuilder line = new StringBuilder();
         while (hasNext()) {
             char c = nextChar();
             if (c == '\r') {
@@ -78,12 +77,9 @@ public class Scanner {
             } else if (c == '\n') {
                 break;
             }
-            len++;
+            line.append(c);
         }
-        String line = new String(buffer,readPointer, len);
-
-        readPointer = lookupPointer;
-        return line;
+        return line.toString();
     }
 
     public void close() throws IOException {
@@ -91,44 +87,35 @@ public class Scanner {
     }
 
     private String nextItem(boolean isLookup, Pattern pattern) throws IOException {
-        String item;
+        StringBuilder itemSb = new StringBuilder();
         if (cache != null && cache.pattern() == pattern) {
-            item = cache.value();
-            if (isLookup) {
-                lookupPointer = readPointer;
-            } else {
-                readPointer = cache.cachePointer();
+            String item = cache.value();
+            if (!isLookup) {
                 lookupPointer = cache.cachePointer();
                 cache = null;
             }
             return item;
         }
         boolean isPreviousSpace = true;
-        int len = 0;
         while (hasNext()) {
             char c = nextChar();
             if (!isSplitChar(c, pattern)) {
                 if (isPreviousSpace) {
                     isPreviousSpace = false;
                 }
-                len++;
+                itemSb.append(c);
             } else if (!isPreviousSpace){
                 break;
-            } else {
-                readPointer++;
             }
         }
-        if (len == 0) {
+        if (itemSb.isEmpty()) {
             return "";
         }
-        item = new String(buffer,readPointer, len);
         if (isLookup) {
-            cache = new Cache(pattern, item, lookupPointer);
-            lookupPointer = readPointer;
-        } else {
-            readPointer = lookupPointer;
+            cache = new Cache(pattern, itemSb.toString(), lookupPointer);
+            lookupPointer -= itemSb.length();
         }
-        return item;
+        return itemSb.toString();
     }
 
     private char nextChar() throws IOException {
@@ -138,34 +125,9 @@ public class Scanner {
 
     private void readInBufferIfEmpty() throws IOException {
         if (lookupPointer >= readedCharNum) {
-            readInBuffer();
-        }
-    }
-
-    private void readInBuffer() throws IOException {
-        if (readPointer < lookupPointer) {
-            int offset = buffer.length - readPointer;
-            readAndCopyBuffer(offset);
-            lookupPointer = offset;
-            readPointer = 0;
-            if (readedCharNum < 0) {
-                readedCharNum = offset;
-            } else {
-                readedCharNum += offset;
-            }
-        } else {
-            buffer = new char[BUFFER_SIZE];
             readedCharNum = reader.read(buffer);
-            readPointer = 0;
             lookupPointer = 0;
         }
-    }
-
-    private void readAndCopyBuffer(int offset) throws IOException {
-        char[] newBuffer = new char[offset + BUFFER_SIZE];
-        readedCharNum = reader.read(newBuffer, offset, BUFFER_SIZE);
-        System.arraycopy(buffer, readPointer, newBuffer, 0, offset);
-        buffer = newBuffer;
     }
 
     private boolean isInteger(String s) {

@@ -6,11 +6,11 @@ public class ReverseOdd {
         try {
             Scanner in = new Scanner(System.in);
             try {
-                int[][] listLine = new int[1][];
+                int[][] listLine = new int[10][];
                 int pointerLine = 0;
                 while (in.hasNext()) {
                     String line = in.nextLine();
-                    int[] listInt = new int[1];
+                    int[] listInt = new int[10];
                     int pointerInt = 0;
                     Scanner stringScanner = new Scanner(line);
                     while (stringScanner.hasNextInt()) {

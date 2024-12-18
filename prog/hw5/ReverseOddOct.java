@@ -1,23 +1,24 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ReverseOddOct {
     public static void main(String[] args) {
         try {
-            Scanner in = new Scanner(System.in);
+            ScannerSb in = new ScannerSb(System.in);
             try {
-                long[][] listLine = new long[1][];
+                long[][] listLine = new long[10][];
                 int pointerLine = 0;
                 while (in.hasNext()) {
                     String line = in.nextLine();
-                    long[] listInt = new long[1];
+                    long[] listInt = new long[10];
                     int pointerInt = 0;
-                    Scanner stringScanner = new Scanner(line);
-                    while (stringScanner.hasNexLong()) {
+                    ScannerSb stringScannerSb = new ScannerSb(line);
+                    while (stringScannerSb.hasNexLong()) {
                         if (pointerInt >= listInt.length) {
                             listInt = Arrays.copyOf(listInt, listInt.length * 2);
                         }
-                        long number = stringScanner.nextLong();
+                        long number = stringScannerSb.nextLong();
                         if (number % 2 != 0) {
                             listInt[pointerInt++] = number;
                         }

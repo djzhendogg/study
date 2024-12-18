@@ -4,15 +4,15 @@ import java.util.Arrays;
 public class Reverse {
     public static void main(String[] args) {
         try {
-            Scanner in = new Scanner(System.in);
+            ScannerSb in = new ScannerSb(System.in);
             try {
-                int[][] listLine = new int[1][];
+                int[][] listLine = new int[10][];
                 int pointerLine = 0;
                 while (in.hasNext()) {
                     String line = in.nextLine();
-                    int[] listInt = new int[1];
+                    int[] listInt = new int[10];
                     int pointerInt = 0;
-                    Scanner stringScanner = new Scanner(line);
+                    ScannerSb stringScanner = new ScannerSb(line);
                     while (stringScanner.hasNextInt()) {
                         if (pointerInt >= listInt.length) {
                             listInt = Arrays.copyOf(listInt, listInt.length * 2);
