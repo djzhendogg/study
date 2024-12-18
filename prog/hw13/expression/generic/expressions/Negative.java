@@ -1,9 +1,9 @@
 package expression.generic.expressions;
 
-import expression.generic.operation_types.ArithmeticOperations;
+import expression.generic.operation_types.NumericOperations;
 
 public class Negative<T extends Number> extends UnaryOperator<T> {
-    public Negative(TripleExpression<T> operand, ArithmeticOperations<T> operations) {
+    public Negative(TripleExpression<T> operand, NumericOperations<T> operations) {
         super("-", 3, operand, operations);
     }
 

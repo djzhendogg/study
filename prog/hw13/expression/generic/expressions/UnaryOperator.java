@@ -1,6 +1,6 @@
 package expression.generic.expressions;
 
-import expression.generic.operation_types.ArithmeticOperations;
+import expression.generic.operation_types.NumericOperations;
 
 import java.util.Objects;
 
@@ -8,9 +8,9 @@ public abstract class UnaryOperator<T extends Number> implements TripleExpressio
     protected final String value;
     private final int priority;
     protected final TripleExpression<T> operand;
-    protected final ArithmeticOperations<T> operations;
+    protected final NumericOperations<T> operations;
 
-    public UnaryOperator(String value, int priority, TripleExpression<T> operand, ArithmeticOperations<T> operations) {
+    public UnaryOperator(String value, int priority, TripleExpression<T> operand, NumericOperations<T> operations) {
         this.value = value;
         this.priority = priority;
         this.operand = operand;

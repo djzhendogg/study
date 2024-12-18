@@ -5,7 +5,7 @@ import expression.exceptions.expresion_exceptions.IntOverflowException;
 import expression.exceptions.expresion_exceptions.ZeroDivisionException;
 import expression.generic.expressions.MathConstraints;
 
-public class IntMath implements ArithmeticOperations<Integer> {
+public class IntOperations implements NumericOperations<Integer> {
     @Override
     public Integer add(Integer left, Integer right) {
         validateOverflow(MathConstraints.checkAddOverflow(left, right));

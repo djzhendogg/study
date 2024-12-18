@@ -1,6 +1,6 @@
 package expression.generic.expressions;
 
-import expression.generic.operation_types.ArithmeticOperations;
+import expression.generic.operation_types.NumericOperations;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ public abstract class BinaryOperator<T extends Number> implements TripleExpressi
     private final TripleExpression<T> operand2;
     private final boolean isCommutative;
     private final boolean isAssociative;
-    protected final ArithmeticOperations<T> operations;
+    protected final NumericOperations<T> operations;
 
     public BinaryOperator(
             String value,
@@ -20,7 +20,7 @@ public abstract class BinaryOperator<T extends Number> implements TripleExpressi
             TripleExpression<T> operand2,
             boolean isCommutative,
             boolean isAssociative,
-            ArithmeticOperations<T> operations
+            NumericOperations<T> operations
     ) {
         this.value = value;
         this.priority = priority;

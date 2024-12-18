@@ -1,12 +1,14 @@
 package expression.generic.parser;
 
+import expression.parser.BaseParser;
 import expression.generic.expressions.*;
-import expression.generic.operation_types.ArithmeticOperations;
+import expression.generic.operation_types.NumericOperations;
+import expression.parser.StringSource;
 
 public class ExpressionParser<T extends Number> extends BaseParser implements TripleParser<T> {
-    private final ArithmeticOperations<T> operations;
+    private final NumericOperations<T> operations;
 
-    public ExpressionParser(ArithmeticOperations<T> operations) {
+    public ExpressionParser(NumericOperations<T> operations) {
         this.operations = operations;
     }
 

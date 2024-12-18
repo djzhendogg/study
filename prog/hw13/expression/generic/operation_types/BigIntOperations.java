@@ -5,7 +5,7 @@ import expression.exceptions.expresion_exceptions.ZeroDivisionException;
 
 import java.math.BigInteger;
 
-public class BigIntMath implements ArithmeticOperations<BigInteger> {
+public class BigIntOperations implements NumericOperations<BigInteger> {
     @Override
     public BigInteger add(BigInteger left, BigInteger right) {
         return left.add(right);

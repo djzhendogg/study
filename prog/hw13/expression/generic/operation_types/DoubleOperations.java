@@ -2,7 +2,7 @@ package expression.generic.operation_types;
 
 import expression.exceptions.expresion_exceptions.ConstValueException;
 
-public class DoubleMath implements ArithmeticOperations<Double> {
+public class DoubleOperations implements NumericOperations<Double> {
     @Override
     public Double add(Double left, Double right) {
         return left + right;

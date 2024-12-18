@@ -1,33 +1,19 @@
 package expression.generic;
 
 import expression.exceptions.expresion_exceptions.CommandLineArgumentsException;
-import expression.exceptions.expresion_exceptions.UnsupportedMode;
+import expression.exceptions.expresion_exceptions.UnsupportedModeException;
 
 public class Main {
     public static void main(String[] args) {
         if (args.length < 2) {
-            throw new CommandLineArgumentsException("The required arguments are missing. " +
-                    "Command line argument pattern: -[mode] [expression].");
+            throw new CommandLineArgumentsException("-[mode] [expression]");
         }
         if (!args[0].startsWith("-")) {
-            throw new UnsupportedMode("The type in which the calculations will be performed must begin with '-'.");
+            throw new UnsupportedModeException("Calculations type for performance must starts with '-'.");
         }
-        try {
-            GenericTabulator tabulator = new GenericTabulator();
-            Object[][][] table = tabulator.tabulate(
-                    args[0].substring(1),
-                    args[1],
-                    -2,
-                    2,
-                    -2,
-                    2,
-                    -2,
-                    2
-            );
-            printTable(table);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        GenericTabulator tabulator = new GenericTabulator();
+        Object[][][] table = tabulator.tabulate(args[0].substring(1), args[1], -2, 2, -2, 2, -2, 2);
+        printTable(table);
     }
 
     private static void printTable(Object[][][] table) {
