@@ -15,4 +15,5 @@ java -ea -cp ./prog-intro/java-solutions:./prog-intro-2024/java expression.parse
 javac -classpath ./prog-intro/java-solutions:./prog-intro-2024/java prog-intro-2024/java/expression/exceptions/TripleParser.java
 javac -classpath ./prog-intro/java-solutions:./prog-intro-2024/java prog-intro-2024/java/expression/exceptions/ExceptionsTest.java
 javac -classpath ./prog-intro/java-solutions:./prog-intro-2024/java prog-intro-2024/java/expression/exceptions/ExceptionsTestSet.java
-java -ea -cp ./prog-intro/java-solutions:./prog-intro-2024/java expression.exceptions.ExceptionsTest easy Base
+java -ea -cp ./prog-intro/java-solutions:./prog-intro-2024/java expression.exceptions.ExceptionsTest easy LastVars
+java -ea -cp ./prog-intro/java-solutions:./prog-intro-2024/java expression.exceptions.ExceptionsTest easy Geom
