@@ -6,6 +6,7 @@ public class LinearScannerSb {
     private final BufferedReader reader;
     private char[] buffer = new char[BUFFER_SIZE];
     private int lookupPointer = 0;
+    private int readPointer = 0;
     private int readedCharNum;
     private Cache cache = null;
     private char ch = 0xffff;
@@ -114,25 +115,21 @@ public class LinearScannerSb {
     }
     
     private void skipWhiteSpace(Pattern pattern) throws IOException {
-        while (hasNext()) {
-            nextChar();
+        do {
             if (!isSplitChar(ch, pattern)) {
                 break;
             }
-        }
+            nextChar();
+        } while (hasNext());
     }
 
-    private boolean isLineBreaker() throws IOException {
+    public boolean isLineBreaker() throws IOException {
         if (ch == '\r') {
             if (hasNext() && buffer[lookupPointer] == '\n') {
                 nextChar();
             }
             return true;
-        } else if (ch == '\n') {
-            nextChar();
-            return true;
-        }
-        return false;
+        } else return ch == '\n';
     }
 
     private boolean isInteger(String s) {
